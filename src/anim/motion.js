@@ -140,7 +140,7 @@ function runAmbientMotion({ animate, stagger, reduceMotion }) {
     ease: 'inOutQuad',
   });
 
-  animate('.signal-card__image', {
+  animate('.headshot-image', {
     rotate: { from: '-0.8deg', to: '1.5deg' },
     scale: { from: 0.995, to: 1.01 },
     duration: 5200,

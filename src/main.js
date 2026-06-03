@@ -10,9 +10,13 @@ const navLinks = [...document.querySelectorAll('[data-nav-link]')];
 const indicator = document.querySelector('[data-nav-indicator]');
 const sections = [...document.querySelectorAll('main section[id]')];
 const year = document.querySelector('[data-year]');
+const copyEmailButton = document.querySelector('[data-copy-email]');
+const copyStatus = document.querySelector('[data-copy-status]');
 
 document.documentElement.classList.add('js-ready');
-year.textContent = new Date().getFullYear();
+if (year) {
+  year.textContent = new Date().getFullYear();
+}
 
 function setNavOpen(isOpen) {
   navToggle?.setAttribute('aria-expanded', String(isOpen));
@@ -27,6 +31,33 @@ navToggle?.addEventListener('click', () => {
 
 navLinks.forEach((link) => {
   link.addEventListener('click', () => setNavOpen(false));
+});
+
+copyEmailButton?.addEventListener('click', async () => {
+  const email = copyEmailButton.dataset.email;
+
+  if (!email) {
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(email);
+    if (copyStatus) {
+      copyStatus.textContent = 'Copied';
+    }
+    copyEmailButton.textContent = 'Copied';
+  } catch {
+    if (copyStatus) {
+      copyStatus.textContent = email;
+    }
+  }
+
+  window.setTimeout(() => {
+    if (copyStatus) {
+      copyStatus.textContent = '';
+    }
+    copyEmailButton.textContent = 'Copy email';
+  }, 2200);
 });
 
 function moveIndicator(link) {

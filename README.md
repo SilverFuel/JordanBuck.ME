@@ -53,4 +53,4 @@ Render automatically provisions and renews a free managed TLS certificate after 
 
 ## Content Updates
 
-Primary page content lives in `index.html`. Update the Open Graph preview text in `public/og-card.svg` if the headline or positioning statement changes.
+Primary page content lives in `index.html`. Update the Open Graph source art in `public/og-card.svg`, then regenerate `public/og-card.png` at 1200x630 before publishing metadata changes.

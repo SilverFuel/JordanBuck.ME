@@ -1,0 +1,7 @@
+# Jordan Buck
+
+Personal site for Jordan Buck, an enterprise IT leader focused on Tier 3 operations, endpoint modernization, ServiceNow process improvement, and practical AI adoption.
+
+- [Site](https://jordanbuck.me/)
+- [LinkedIn](https://www.linkedin.com/in/jordan-buck-46102973/)
+- [GitHub](https://github.com/SilverFuel)
