@@ -1,4 +1,13 @@
-import { animate, createTimeline, onScroll, stagger, utils } from 'animejs';
+import {
+  animate,
+  createDraggable,
+  createSpring,
+  createTimeline,
+  onScroll,
+  spring,
+  stagger,
+  utils,
+} from 'animejs';
 import './styles/main.css';
 import { initAnimations } from './anim/motion.js';
 
@@ -111,8 +120,11 @@ window.addEventListener('hashchange', () => {
 
 initAnimations({
   animate,
+  createDraggable,
+  createSpring,
   createTimeline,
   onScroll,
+  spring,
   stagger,
   utils,
   reduceMotion,

@@ -49,9 +49,11 @@ html {
   }
 
   .js-ready .glyph,
+  .js-ready .eyebrow-char,
   .js-ready .reveal-line,
   .js-ready .reveal-card,
-  .js-ready .hero__signal {
+  .js-ready .hero__signal,
+  .js-ready .grid-field {
     opacity: 1 !important;
     transform: none !important;
     will-change: auto !important;
@@ -198,6 +200,9 @@ button {
   border-radius: var(--radius);
   font-size: 0.78rem;
   font-weight: 850;
+  pointer-events: auto !important;
+  touch-action: none;
+  will-change: transform;
 }
 
 .nav__brand span:last-child {
@@ -335,6 +340,10 @@ button {
 .glyph {
   display: inline-block;
   transform-origin: 50% 75%;
+}
+
+.eyebrow-char {
+  display: inline-block;
 }
 
 .hero__tagline,
@@ -784,9 +793,11 @@ button {
 }
 
 .js-ready .glyph,
+.js-ready .eyebrow-char,
 .js-ready .reveal-line,
 .js-ready .reveal-card,
-.js-ready .hero__signal {
+.js-ready .hero__signal,
+.js-ready .grid-field {
   will-change: transform, opacity;
 }
 
