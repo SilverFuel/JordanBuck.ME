@@ -11,7 +11,61 @@ import {
 import './styles/main.css';
 import { initAnimations } from './anim/motion.js';
 
+const RECOMMENDATIONS_LIVE = false;
+const recommendations = [
+  {
+    quote: 'Jordan turns chaotic escalations into calm, repeatable process. He owns outcomes, not just tickets.',
+    source: 'Name, Title, Organization',
+  },
+  {
+    quote: 'One of the few technical leaders who can translate a messy incident into a plan leadership actually understands.',
+    source: 'Name, Title, Organization',
+  },
+  {
+    quote: 'He modernizes without breaking things — and brings the team with him.',
+    source: 'Name, Title, Organization',
+  },
+];
+
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const scrollProgress = document.querySelector('[data-scroll-progress]');
+
+function configureRecommendations() {
+  const section = document.querySelector('[data-recommendations-section]');
+  const navLink = document.querySelector('[data-recommendations-nav]');
+  const list = document.querySelector('[data-recommendations-list]');
+
+  if (!RECOMMENDATIONS_LIVE) {
+    section?.remove();
+    navLink?.remove();
+    return;
+  }
+
+  section?.removeAttribute('hidden');
+  navLink?.removeAttribute('hidden');
+
+  if (!list) {
+    return;
+  }
+
+  list.replaceChildren(
+    ...recommendations.map(({ quote, source }) => {
+      const card = document.createElement('figure');
+      const blockquote = document.createElement('blockquote');
+      const figcaption = document.createElement('figcaption');
+
+      card.className = 'quote-card reveal-card';
+      blockquote.textContent = quote;
+      figcaption.textContent = `— ${source}`;
+      card.append(blockquote, figcaption);
+
+      return card;
+    }),
+  );
+}
+
+configureRecommendations();
+
 const header = document.querySelector('[data-header]');
 const navMenu = document.querySelector('[data-nav-menu]');
 const navToggle = document.querySelector('[data-nav-toggle]');
@@ -97,6 +151,16 @@ function updateActiveNav() {
   moveIndicator(activeLink);
 }
 
+function updateScrollProgress() {
+  if (!scrollProgress) {
+    return;
+  }
+
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+  scrollProgress.style.transform = `scaleX(${Math.min(Math.max(progress, 0), 1)})`;
+}
+
 let lastScroll = window.scrollY;
 window.addEventListener(
   'scroll',
@@ -106,12 +170,14 @@ window.addEventListener(
     header?.classList.toggle('is-scrolled', currentScroll > 24);
     lastScroll = currentScroll;
     updateActiveNav();
+    updateScrollProgress();
   },
   { passive: true },
 );
 
 window.addEventListener('resize', () => {
   updateActiveNav();
+  updateScrollProgress();
 });
 
 window.addEventListener('hashchange', () => {
@@ -131,3 +197,4 @@ initAnimations({
 });
 
 updateActiveNav();
+updateScrollProgress();

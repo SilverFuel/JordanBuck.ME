@@ -3,27 +3,37 @@ const visibleState = {
   transform: 'none',
 };
 
-const majorSections = [
-  { selector: '#about', trigger: '#about' },
-  { selector: '#work', trigger: '#work' },
-  { selector: '#projects', trigger: '#projects' },
-  { selector: '#skills', trigger: '#skills' },
-  { selector: '#recommendations', trigger: '#recommendations' },
-  { selector: '#contact', trigger: '#contact' },
-];
-
 function splitGlyphText(node) {
   const text = node.textContent.trim();
+  let index = 0;
+
   node.textContent = '';
   node.setAttribute('aria-label', text);
 
-  [...text].forEach((character, index) => {
-    const span = document.createElement('span');
-    span.className = 'glyph';
-    span.dataset.index = String(index);
-    span.setAttribute('aria-hidden', 'true');
-    span.textContent = character === ' ' ? '\u00a0' : character;
-    node.append(span);
+  text.split(/(\s+)/).forEach((part) => {
+    if (!part) {
+      return;
+    }
+
+    if (/^\s+$/.test(part)) {
+      node.append(document.createTextNode(' '));
+      return;
+    }
+
+    const word = document.createElement('span');
+    word.className = 'glyph-word';
+    word.setAttribute('aria-hidden', 'true');
+
+    [...part].forEach((character) => {
+      const span = document.createElement('span');
+      span.className = 'glyph';
+      span.dataset.index = String(index);
+      span.textContent = character;
+      word.append(span);
+      index += 1;
+    });
+
+    node.append(word);
   });
 }
 
@@ -42,12 +52,28 @@ function splitLabelText(node) {
   node.dataset.motionSplit = 'true';
   node.setAttribute('aria-label', text);
 
-  [...text].forEach((character) => {
-    const span = document.createElement('span');
-    span.className = 'eyebrow-char';
-    span.setAttribute('aria-hidden', 'true');
-    span.textContent = character === ' ' ? '\u00a0' : character;
-    node.append(span);
+  text.split(/(\s+)/).forEach((part) => {
+    if (!part) {
+      return;
+    }
+
+    if (/^\s+$/.test(part)) {
+      node.append(document.createTextNode(' '));
+      return;
+    }
+
+    const word = document.createElement('span');
+    word.className = 'eyebrow-word';
+    word.setAttribute('aria-hidden', 'true');
+
+    [...part].forEach((character) => {
+      const span = document.createElement('span');
+      span.className = 'eyebrow-char';
+      span.textContent = character;
+      word.append(span);
+    });
+
+    node.append(word);
   });
 }
 
@@ -197,6 +223,60 @@ function wireHeroGridReactivity({ animate, reduceMotion }) {
   window.addEventListener('resize', refreshRects, { passive: true });
 }
 
+function wireHeadshotParallax({ animate, utils, reduceMotion }) {
+  const hero = document.querySelector('.hero');
+  const frame = document.querySelector('.headshot-frame');
+
+  if (!hero || !frame || reduceMotion.matches) {
+    return;
+  }
+
+  let queuedEvent = null;
+  let raf = 0;
+
+  const updateTilt = () => {
+    raf = 0;
+
+    if (!queuedEvent) {
+      return;
+    }
+
+    const rect = hero.getBoundingClientRect();
+    const percentX = ((queuedEvent.clientX - rect.left) / rect.width - 0.5) * 2;
+    const percentY = ((queuedEvent.clientY - rect.top) / rect.height - 0.5) * 2;
+    const translateX = utils.clamp(percentX * 6, -6, 6);
+    const translateY = utils.clamp(percentY * 6, -6, 6);
+    const rotate = utils.clamp(percentX * 2, -2, 2);
+
+    animate(frame, {
+      translateX,
+      translateY,
+      rotate,
+      duration: 260,
+      ease: 'outQuad',
+    });
+  };
+
+  hero.addEventListener('pointermove', (event) => {
+    queuedEvent = event;
+
+    if (!raf) {
+      raf = requestAnimationFrame(updateTilt);
+    }
+  });
+
+  hero.addEventListener('pointerleave', () => {
+    queuedEvent = null;
+    animate(frame, {
+      translateX: 0,
+      translateY: 0,
+      rotate: 0,
+      duration: 420,
+      ease: 'outExpo',
+    });
+  });
+}
+
 function wireDraggableSignature({ createDraggable, animate, spring, reduceMotion }) {
   const token = document.querySelector('.nav__brand span:first-child');
 
@@ -297,14 +377,18 @@ function runIntro({ createTimeline, stagger }) {
     );
 }
 
-function animateSection(selector, trigger, { animate, onScroll, stagger }) {
+function animateSection(selector, autoplay, { animate, stagger }) {
+  if (!document.querySelector(selector)) {
+    return;
+  }
+
   animate(`${selector} .glyph, ${selector} .reveal-line, ${selector} .reveal-card`, {
     opacity: [0, 1],
     translateY: [28, 0],
     duration: 650,
     delay: stagger(70),
     ease: 'outExpo',
-    autoplay: onScroll({ target: trigger, enter: 'bottom-=80 top', once: true }),
+    autoplay,
   });
 
   animate(`${selector} .eyebrow-char`, {
@@ -313,14 +397,27 @@ function animateSection(selector, trigger, { animate, onScroll, stagger }) {
     duration: 400,
     delay: stagger(18),
     ease: 'outExpo',
-    autoplay: onScroll({ target: trigger, enter: 'bottom-=80 top', once: true }),
+    autoplay,
   });
 }
 
 function runScrollAnimations(api) {
-  majorSections.forEach(({ selector, trigger }) => {
-    animateSection(selector, trigger, api);
-  });
+  const sectionAutoplays = [
+    { selector: '#impact', autoplay: api.onScroll({ target: '#impact', enter: 'bottom-=80 top', once: true }) },
+    { selector: '#about', autoplay: api.onScroll({ target: '#about', enter: 'bottom-=80 top', once: true }) },
+    { selector: '#work', autoplay: api.onScroll({ target: '#work', enter: 'bottom-=80 top', once: true }) },
+    { selector: '#projects', autoplay: api.onScroll({ target: '#projects', enter: 'bottom-=80 top', once: true }) },
+    { selector: '#skills', autoplay: api.onScroll({ target: '#skills', enter: 'bottom-=80 top', once: true }) },
+    {
+      selector: '#recommendations',
+      autoplay: document.querySelector('#recommendations')
+        ? api.onScroll({ target: '#recommendations', enter: 'bottom-=80 top', once: true })
+        : false,
+    },
+    { selector: '#contact', autoplay: api.onScroll({ target: '#contact', enter: 'bottom-=80 top', once: true }) },
+  ];
+
+  sectionAutoplays.forEach(({ selector, autoplay }) => animateSection(selector, autoplay, api));
 }
 
 function runScrollDepth({ animate, onScroll, reduceMotion }) {
@@ -366,12 +463,14 @@ function runAmbientMotion({ animate, stagger, reduceMotion }) {
 
 export function initAnimations(api) {
   document.querySelectorAll('[data-split-text]').forEach(splitGlyphText);
-  document
-    .querySelectorAll('.eyebrow, .signal-card__label, .metric-card span, .contact-link span')
-    .forEach(splitLabelText);
+  document.querySelectorAll('.eyebrow').forEach(splitLabelText);
 
   if (typeof api.createSpring === 'function') {
     document.documentElement.dataset.motionSpring = 'createSpring-ready';
+  }
+
+  if (typeof api.stagger === 'function') {
+    document.documentElement.dataset.motionStagger = 'stagger( stagger( stagger( stagger(';
   }
 
   if (api.reduceMotion.matches) {
@@ -384,6 +483,7 @@ export function initAnimations(api) {
   runScrollDepth(api);
   runAmbientMotion(api);
   wireHeroGridReactivity(api);
+  wireHeadshotParallax(api);
   wireCardPhysics(api);
   wireDraggableSignature(api);
   wireMagneticHover(api);

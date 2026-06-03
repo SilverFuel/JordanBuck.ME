@@ -49,6 +49,7 @@
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
+    <div class="scroll-progress" aria-hidden="true" data-scroll-progress></div>
 
     <header class="site-header" data-header>
       <nav class="nav shell" aria-label="Primary navigation">
@@ -72,7 +73,7 @@
           <a href="#work" data-nav-link>Highlights</a>
           <a href="#projects" data-nav-link>Projects</a>
           <a href="#skills" data-nav-link>Skills</a>
-          <a href="#recommendations" data-nav-link>Recommendations</a>
+          <a href="#recommendations" data-nav-link data-recommendations-nav hidden>Recommendations</a>
           <a href="#contact" data-nav-link>Contact</a>
           <span class="nav__indicator" aria-hidden="true" data-nav-indicator></span>
         </div>
@@ -121,6 +122,37 @@
         </div>
       </section>
 
+      <section class="section section--impact" id="impact" aria-labelledby="impact-title">
+        <div class="shell impact-panel">
+          <div>
+            <p class="eyebrow reveal-line">Impact / By the numbers</p>
+            <h2 class="section-title section-title--compact glyph-title" id="impact-title" data-split-text>Operational scope</h2>
+          </div>
+          <ul class="impact-list" aria-label="Impact facts and owner-fill metric slots">
+            <li class="impact-chip reveal-card">
+              <strong>70+</strong>
+              <span>agencies supported</span>
+            </li>
+            <li class="impact-chip reveal-card">
+              <strong>Thousands</strong>
+              <span>endpoints managed</span>
+            </li>
+            <li class="impact-chip reveal-card">
+              <strong>20-person</strong>
+              <span>technical team led</span>
+            </li>
+            <li class="impact-chip impact-chip--add reveal-card">
+              <strong>[ADD]</strong>
+              <span>years in role / total IT leadership experience</span>
+            </li>
+            <li class="impact-chip impact-chip--add reveal-card">
+              <strong>[ADD]</strong>
+              <span>one outcome metric — e.g., % faster escalation resolution, # devices modernized</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
       <section class="section section--about" id="about" aria-labelledby="about-title">
         <div class="shell section-grid">
           <div>
@@ -128,8 +160,8 @@
             <h2 class="section-title glyph-title" id="about-title" data-split-text>What I do</h2>
           </div>
           <div class="section-copy">
-            <p class="lead reveal-line">I'm an enterprise IT leader in Indianapolis who runs Tier 3 operations for Indiana Office of Technology, serving 70+ government agencies and thousands of endpoints. I lead a 20-person technical team and own the outcomes of the hardest escalations — root-cause analysis, endpoint modernization, and the move from legacy management to Intune and Windows Autopilot. I work where people, process, and technology meet, and I bring practical AI and automation into that work to make it faster, clearer, and repeatable. [METRIC: add one concrete outcome — e.g., escalation resolution time, devices modernized, or process cycle reduced.]</p>
-            <div class="metric-strip">
+            <p class="lead reveal-line">I'm an enterprise IT leader in Indianapolis who runs Tier 3 operations for Indiana Office of Technology, serving 70+ government agencies and thousands of endpoints. I lead a 20-person technical team and own the outcomes of the hardest escalations — root-cause analysis, endpoint modernization, and the move from legacy management to Intune and Windows Autopilot. I work where people, process, and technology meet, and I bring practical AI and automation into that work to make it faster, clearer, and repeatable.</p>
+            <div class="metric-strip about-focus">
               <div class="metric-card reveal-card">
                 <span>Known for</span>
                 <strong>Leading complex IT initiatives end to end, modernizing endpoint and escalation operations, and translating ambiguous technical problems into clear, accountable execution plans — increasingly with AI and automation handling the repetitive work.</strong>
@@ -137,10 +169,6 @@
               <div class="metric-card reveal-card">
                 <span>Current focus</span>
                 <strong>Tier 3 operations leadership, endpoint modernization with Intune and Windows Autopilot, ServiceNow process improvement, statewide AI governance, and automation that helps technical teams manage escalations, projects, and documentation at scale.</strong>
-              </div>
-              <div class="metric-card reveal-card">
-                <span>Metric slot</span>
-                <strong>[METRIC: add one concrete outcome] is intentionally visible for a future hard number.</strong>
               </div>
             </div>
           </div>
@@ -151,7 +179,7 @@
         <div class="shell">
           <div class="section-heading">
             <p class="eyebrow reveal-line">Work / Highlights</p>
-            <h2 class="section-title glyph-title" id="work-title" data-split-text>Selected signal</h2>
+            <h2 class="section-title glyph-title" id="work-title" data-split-text>Areas of impact</h2>
           </div>
           <div class="card-grid" data-card-grid>
             <article class="work-card reveal-card magnetic">
@@ -186,20 +214,36 @@
           </div>
           <div class="project-grid" data-card-grid>
             <article class="project-card reveal-card magnetic">
+              <div class="project-card__media" role="img" aria-label="MissionBoard operations dashboard image slot" data-image-slot="/projects/missionboard.jpg"></div>
               <h3>MissionBoard</h3>
               <p>A multi-tenant SaaS command center for IT operations teams — projects, escalations, and status in one place. Built from real Tier 3 needs.</p>
+              <p class="project-card__why">The Tier 3 operations tool I wished my team had — built from real escalation workflows.</p>
+              <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
+              <!-- Owner slot: Add public/projects/missionboard.jpg and replace the hidden link href when ready. -->
             </article>
             <article class="project-card reveal-card magnetic">
+              <div class="project-card__media" role="img" aria-label="PrintDeck model catalog image slot" data-image-slot="/projects/printdeck.jpg"></div>
               <h3>PrintDeck</h3>
               <p>An STL library and filament tracker for Bambu 3D printers, with AI vision to auto-tag and organize models.</p>
+              <p class="project-card__why">Hands-on automation: applying AI vision to a real cataloging problem.</p>
+              <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
+              <!-- Owner slot: Add public/projects/printdeck.jpg and replace the hidden link href when ready. -->
             </article>
             <article class="project-card reveal-card magnetic">
+              <div class="project-card__media" role="img" aria-label="HomeOS wall display image slot" data-image-slot="/projects/homeos.jpg"></div>
               <h3>HomeOS</h3>
               <p>A Raspberry Pi wall display for the home — Home Assistant scenes, camera feeds, and ambient/focus UI modes.</p>
+              <p class="project-card__why">Edge computing and UI design, end to end, on constrained hardware.</p>
+              <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
+              <!-- Owner slot: Add public/projects/homeos.jpg and replace the hidden link href when ready. -->
             </article>
             <article class="project-card reveal-card magnetic">
+              <div class="project-card__media" role="img" aria-label="OffGridIQ air-quality device image slot" data-image-slot="/projects/offgridiq.jpg"></div>
               <h3>OffGridIQ</h3>
               <p>A 3D-printable desk air-quality monitor for preparedness-minded makers.</p>
+              <p class="project-card__why">Product thinking from concept to a 3D-printable device.</p>
+              <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
+              <!-- Owner slot: Add public/projects/offgridiq.jpg and replace the hidden link href when ready. -->
             </article>
           </div>
         </div>
@@ -228,26 +272,13 @@
         </div>
       </section>
 
-      <section class="section" id="recommendations" aria-labelledby="recommendations-title">
+      <section class="section" id="recommendations" aria-labelledby="recommendations-title" data-recommendations-section hidden>
         <div class="shell">
           <div class="section-heading">
             <p class="eyebrow reveal-line">Recommendations</p>
             <h2 class="section-title glyph-title" id="recommendations-title" data-split-text>Proof slots</h2>
           </div>
-          <div class="quote-grid">
-            <figure class="quote-card reveal-card">
-              <blockquote>TODO: Add a real recommendation quote about leadership, execution, or technical judgment.</blockquote>
-              <figcaption>Recommendation source</figcaption>
-            </figure>
-            <figure class="quote-card reveal-card">
-              <blockquote>TODO: Add a real quote about endpoint modernization, escalation ownership, or process improvement.</blockquote>
-              <figcaption>Recommendation source</figcaption>
-            </figure>
-            <figure class="quote-card reveal-card">
-              <blockquote>TODO: Add a real quote about AI-assisted operations, documentation quality, or team impact.</blockquote>
-              <figcaption>Recommendation source</figcaption>
-            </figure>
-          </div>
+          <div class="quote-grid" data-recommendations-list></div>
         </div>
       </section>
 
@@ -256,6 +287,7 @@
           <div>
             <p class="eyebrow reveal-line">Contact</p>
             <h2 class="section-title glyph-title" id="contact-title" data-split-text>Let's build the next thing.</h2>
+            <p class="contact-close reveal-line">Whether it's an enterprise IT leadership role, an AI-governance conversation, or a hard operational problem worth solving — I'm glad to talk.</p>
           </div>
           <div class="contact-actions">
             <div class="contact-link contact-link--email reveal-card">
@@ -286,6 +318,9 @@
       </div>
     </footer>
 
+    <!-- Privacy-friendly analytics slot:
+    <script defer data-domain="[ADD DOMAIN]" src="https://plausible.io/js/script.js"></script>
+    -->
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/check-resume.js",
     "build": "vite build",
     "preview": "vite preview",
     "lint:html": "node scripts/check-html.js"

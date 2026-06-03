@@ -53,7 +53,8 @@ html {
   .js-ready .reveal-line,
   .js-ready .reveal-card,
   .js-ready .hero__signal,
-  .js-ready .grid-field {
+  .js-ready .grid-field,
+  .js-ready .headshot-frame {
     opacity: 1 !important;
     transform: none !important;
     will-change: auto !important;
@@ -141,6 +142,19 @@ button {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 40;
+  height: 3px;
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--accent), var(--accent-3), var(--accent-2));
+  transform: scaleX(0);
+  transform-origin: left center;
 }
 
 .shell {
@@ -284,22 +298,23 @@ button {
 
 .section {
   position: relative;
-  padding: 108px 0;
+  padding: 30px 0;
   scroll-margin-top: var(--header-height);
 }
 
 .hero {
   display: grid;
-  min-height: 100vh;
-  padding-top: calc(var(--header-height) + 60px);
+  min-height: 74vh;
+  padding-top: calc(var(--header-height) + 18px);
+  padding-bottom: 18px;
   align-items: center;
   overflow: hidden;
 }
 
 .hero__inner {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.76fr);
-  gap: clamp(2rem, 6vw, 5rem);
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.58fr);
+  gap: clamp(1.5rem, 4.8vw, 4rem);
   align-items: center;
 }
 
@@ -318,7 +333,7 @@ button {
 
 .hero__title,
 .section-title {
-  max-width: 11ch;
+  max-width: 13ch;
   margin: 0;
   line-height: 0.92;
   font-weight: 880;
@@ -326,19 +341,36 @@ button {
 }
 
 .hero__title {
-  font-size: clamp(4rem, 13vw, 9.4rem);
+  font-size: clamp(4rem, 9.4vw, 6.8rem);
 }
 
 .section-title {
-  font-size: clamp(2.8rem, 8vw, 6rem);
+  font-size: clamp(2.35rem, 4.8vw, 4.15rem);
+}
+
+.section-title--compact {
+  font-size: clamp(2.2rem, 4.2vw, 3.8rem);
 }
 
 .glyph-title {
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+.glyph,
+.glyph-word,
+.eyebrow-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.glyph-word,
+.eyebrow-word {
+  vertical-align: baseline;
 }
 
 .glyph {
-  display: inline-block;
   transform-origin: 50% 75%;
 }
 
@@ -352,12 +384,12 @@ button {
 .lead {
   max-width: 65ch;
   color: var(--muted);
-  font-size: clamp(1.05rem, 2vw, 1.35rem);
-  line-height: 1.7;
+  font-size: clamp(1rem, 1.6vw, 1.16rem);
+  line-height: 1.58;
 }
 
 .hero__role {
-  margin: 1.1rem 0 0;
+  margin: 0.95rem 0 0;
   color: var(--text);
   font-size: clamp(1rem, 1.7vw, 1.2rem);
   font-weight: 720;
@@ -379,7 +411,7 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 0.85rem;
-  margin-top: 2.2rem;
+  margin-top: 1.65rem;
 }
 
 .button {
@@ -457,19 +489,22 @@ button {
 .hero__signal {
   position: relative;
   display: grid;
-  gap: 0.85rem;
+  max-width: 360px;
   min-width: 0;
+  justify-self: end;
+  gap: 0.65rem;
 }
 
 .headshot-frame {
   min-width: 0;
-  padding: 0.65rem;
+  padding: 0.45rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background:
     linear-gradient(135deg, rgba(55, 255, 179, 0.1), transparent 44%),
     rgba(255, 255, 255, 0.04);
   box-shadow: var(--shadow);
+  will-change: transform;
 }
 
 .headshot-image {
@@ -483,7 +518,7 @@ button {
 
 .signal-card {
   width: 100%;
-  padding: 1rem;
+  padding: 0.78rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: rgba(12, 14, 21, 0.8);
@@ -498,7 +533,8 @@ button {
 .signal-card p {
   margin: 0;
   color: var(--muted);
-  line-height: 1.55;
+  font-size: 0.94rem;
+  line-height: 1.42;
 }
 
 .signal-card__label {
@@ -511,13 +547,13 @@ button {
 .section-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
-  gap: clamp(2rem, 6vw, 5rem);
+  gap: clamp(1.5rem, 5vw, 4rem);
   align-items: start;
 }
 
 .section-heading {
   max-width: 760px;
-  margin-bottom: 2rem;
+  margin-bottom: 1.35rem;
 }
 
 .section-copy {
@@ -528,7 +564,67 @@ button {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.75rem;
-  margin-top: 2rem;
+  margin-top: 1.4rem;
+}
+
+.about-focus {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.section--impact {
+  padding: 10px 0 24px;
+}
+
+.impact-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: end;
+  padding: 1rem 0 0;
+}
+
+.impact-list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.impact-chip {
+  min-width: 0;
+  min-height: 86px;
+  padding: 0.8rem;
+  border: 1px solid rgba(55, 255, 179, 0.22);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(55, 255, 179, 0.12), transparent 58%),
+    rgba(255, 255, 255, 0.04);
+}
+
+.impact-chip--add {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.26);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.impact-chip strong,
+.impact-chip span {
+  display: block;
+}
+
+.impact-chip strong {
+  color: var(--text);
+  font-size: clamp(1.22rem, 1.8vw, 1.62rem);
+  line-height: 1;
+}
+
+.impact-chip span {
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.28;
 }
 
 .metric-card,
@@ -543,7 +639,7 @@ button {
 
 .metric-card {
   min-width: 0;
-  padding: 1rem;
+  padding: 0.85rem;
 }
 
 .metric-card span,
@@ -553,14 +649,14 @@ button {
   font-family: ui-monospace, "SFMono-Regular", "Roboto Mono", Consolas, monospace;
   font-size: 0.72rem;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .metric-card strong {
   display: block;
   margin-top: 0.7rem;
-  overflow-wrap: anywhere;
-  font-size: 0.96rem;
-  line-height: 1.5;
+  font-size: 0.9rem;
+  line-height: 1.38;
 }
 
 .card-grid {
@@ -573,12 +669,12 @@ button {
 .project-card,
 .quote-card {
   position: relative;
-  padding: 1.05rem;
+  padding: 0.9rem;
   overflow: hidden;
 }
 
 .work-card {
-  min-height: 280px;
+  min-height: 178px;
   transition: border-color 180ms ease, background 180ms ease;
 }
 
@@ -605,17 +701,17 @@ button {
 }
 
 .work-card h3 {
-  min-height: 4.8rem;
-  margin: 4rem 0 1rem;
-  overflow-wrap: anywhere;
-  font-size: 1.35rem;
+  min-height: 2.5rem;
+  margin: 1.7rem 0 0.6rem;
+  font-size: 1.24rem;
   line-height: 1.18;
 }
 
 .work-card p {
   margin: 0;
   color: var(--muted);
-  line-height: 1.6;
+  font-size: 0.94rem;
+  line-height: 1.48;
 }
 
 .section--projects {
@@ -634,7 +730,7 @@ button {
 }
 
 .project-card {
-  min-height: 230px;
+  min-height: 0;
   transition: border-color 180ms ease, background 180ms ease;
 }
 
@@ -649,14 +745,43 @@ button {
 }
 
 .project-card h3 {
-  font-size: 1.45rem;
+  font-size: 1.28rem;
   line-height: 1.2;
 }
 
 .project-card p {
-  margin: 1.4rem 0 0;
+  margin: 0.68rem 0 0;
   color: var(--muted);
-  line-height: 1.62;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.project-card__media {
+  position: relative;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  aspect-ratio: 5 / 1;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: calc(var(--radius) - 2px);
+  background:
+    linear-gradient(135deg, rgba(115, 167, 255, 0.16), transparent 52%),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.04) 25%, transparent 25% 50%, rgba(255, 255, 255, 0.04) 50% 75%, transparent 75%),
+    rgba(255, 255, 255, 0.025);
+  background-size: auto, 16px 16px, auto;
+}
+
+.project-card__media::after {
+  position: absolute;
+  inset: 0.8rem;
+  content: "";
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: calc(var(--radius) - 4px);
+}
+
+.project-card__why {
+  color: #dce4ef !important;
+  font-size: 0.94rem !important;
+  font-weight: 720;
 }
 
 .quote-card {
@@ -690,11 +815,11 @@ button {
 .skill-chip {
   display: inline-flex;
   min-width: 0;
-  min-height: 58px;
+  min-height: 50px;
   align-items: center;
   justify-content: center;
-  padding: 0.85rem;
-  overflow-wrap: anywhere;
+  padding: 0.72rem;
+  overflow-wrap: normal;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background:
@@ -708,9 +833,17 @@ button {
 .contact-panel {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: clamp(2rem, 6vw, 5rem);
+  gap: clamp(1.5rem, 4vw, 3.2rem);
   align-items: start;
-  padding-block: 2rem;
+  padding-block: 0.5rem;
+}
+
+.contact-close {
+  max-width: 48ch;
+  margin: 0.85rem 0 0;
+  color: var(--muted);
+  font-size: clamp(0.98rem, 1.45vw, 1.08rem);
+  line-height: 1.5;
 }
 
 .contact-actions {
@@ -722,7 +855,7 @@ button {
   display: grid;
   min-width: 0;
   gap: 0.45rem;
-  padding: 1rem;
+  padding: 0.85rem;
   transition: border-color 160ms ease, background 160ms ease;
 }
 
@@ -734,7 +867,7 @@ button {
 .contact-link strong,
 .contact-link__main strong {
   overflow-wrap: anywhere;
-  font-size: 1.08rem;
+  font-size: 0.98rem;
 }
 
 .contact-link__main {
@@ -778,7 +911,7 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  min-height: 84px;
+  min-height: 48px;
   color: var(--muted);
   font-size: 0.92rem;
 }
@@ -797,14 +930,16 @@ button {
 .js-ready .reveal-line,
 .js-ready .reveal-card,
 .js-ready .hero__signal,
-.js-ready .grid-field {
+.js-ready .grid-field,
+.js-ready .headshot-frame {
   will-change: transform, opacity;
 }
 
 @media (max-width: 1020px) {
   .hero__inner,
   .section-grid,
-  .contact-panel {
+  .contact-panel,
+  .impact-panel {
     grid-template-columns: 1fr;
   }
 
@@ -816,6 +951,7 @@ button {
     max-width: 620px;
   }
 
+  .impact-list,
   .card-grid,
   .project-grid,
   .quote-grid,
@@ -870,11 +1006,11 @@ button {
   }
 
   .section {
-    padding: 78px 0;
+    padding: 44px 0;
   }
 
   .hero {
-    padding-top: calc(var(--header-height) + 36px);
+    padding-top: calc(var(--header-height) + 28px);
   }
 
   .hero__title {
@@ -884,7 +1020,7 @@ button {
   }
 
   .section-title {
-    max-width: 9ch;
+    max-width: none;
     font-size: clamp(2.5rem, 15vw, 4.4rem);
   }
 
@@ -901,6 +1037,7 @@ button {
     inset: 8% -34% auto auto;
   }
 
+  .impact-list,
   .card-grid,
   .project-grid,
   .quote-grid,
@@ -909,7 +1046,11 @@ button {
   }
 
   .work-card {
-    min-height: 230px;
+    min-height: 188px;
+  }
+
+  .about-focus {
+    grid-template-columns: 1fr;
   }
 
   .contact-link--email {
