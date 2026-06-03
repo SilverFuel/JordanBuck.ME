@@ -2,6 +2,8 @@ const visibleState = {
   opacity: 1,
   transform: 'none',
 };
+const sectionRevealSelector = '.glyph, .eyebrow-char, .reveal-line, .reveal-card';
+const sectionRevealAnimations = new WeakMap();
 
 function splitGlyphText(node) {
   const text = node.textContent.trim();
@@ -79,10 +81,102 @@ function splitLabelText(node) {
 
 function showAllMotionTargets() {
   document
-    .querySelectorAll('.glyph, .eyebrow-char, .reveal-line, .reveal-card, .hero__signal, .grid-field')
+    .querySelectorAll(`${sectionRevealSelector}, .hero__signal, .grid-field, .headshot-frame`)
     .forEach((target) => {
       Object.assign(target.style, visibleState);
     });
+}
+
+function getSectionRevealTargets(section) {
+  return [...section.querySelectorAll(sectionRevealSelector)];
+}
+
+function forceTargetsVisible(targets) {
+  targets.forEach((target) => {
+    target.style.opacity = '1';
+    target.style.transform = 'none';
+  });
+}
+
+function completeSectionReveal(section) {
+  const animation = sectionRevealAnimations.get(section);
+
+  if (!animation) {
+    return;
+  }
+
+  animation.complete(true);
+  sectionRevealAnimations.delete(section);
+}
+
+function setTargetsHidden(targets) {
+  targets.forEach((target) => {
+    target.style.opacity = '0';
+    target.style.transform = 'translate3d(0, 24px, 0)';
+  });
+}
+
+function isSectionInRevealRange(section) {
+  const rect = section.getBoundingClientRect();
+
+  return rect.top < window.innerHeight * 0.9 && rect.bottom > 0;
+}
+
+function installRevealSafetyNet(sections) {
+  const forceVisibleSection = (section) => {
+    completeSectionReveal(section);
+    forceTargetsVisible(getSectionRevealTargets(section));
+  };
+  let strandedSafetyTimer = 0;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        forceVisibleSection(entry.target);
+        observer.unobserve(entry.target);
+      });
+    },
+    {
+      root: null,
+      rootMargin: '0px 0px -10% 0px',
+    },
+  );
+
+  sections.forEach((section) => observer.observe(section));
+
+  requestAnimationFrame(() => {
+    sections.filter(isSectionInRevealRange).forEach(forceVisibleSection);
+  });
+
+  const forceStrandedTargets = () => {
+    const strandedTargets = [...document.querySelectorAll(`main section ${sectionRevealSelector}`)].filter((target) => {
+      const style = getComputedStyle(target);
+
+      return style.opacity !== '1' || style.transform !== 'none';
+    });
+    const strandedSections = new Set(strandedTargets.map((target) => target.closest('section')).filter(Boolean));
+
+    strandedSections.forEach(completeSectionReveal);
+    forceTargetsVisible(strandedTargets);
+  };
+
+  const scheduleStrandedSafety = (delay = 350) => {
+    window.clearTimeout(strandedSafetyTimer);
+    strandedSafetyTimer = window.setTimeout(forceStrandedTargets, delay);
+  };
+
+  if (document.readyState === 'complete') {
+    scheduleStrandedSafety(1500);
+  } else {
+    window.addEventListener('load', () => scheduleStrandedSafety(1500), { once: true });
+  }
+
+  window.addEventListener('scroll', () => scheduleStrandedSafety(), { passive: true });
+  window.addEventListener('resize', () => scheduleStrandedSafety(), { passive: true });
 }
 
 function getGridShape(cells) {
@@ -377,47 +471,40 @@ function runIntro({ createTimeline, stagger }) {
     );
 }
 
-function animateSection(selector, autoplay, { animate, stagger }) {
-  if (!document.querySelector(selector)) {
+function animateSection(section, { animate, onScroll, stagger }) {
+  const targets = getSectionRevealTargets(section);
+
+  if (!targets.length) {
     return;
   }
 
-  animate(`${selector} .glyph, ${selector} .reveal-line, ${selector} .reveal-card`, {
+  const autoplay = onScroll({
+    target: section,
+    enter: 'bottom-=10% top',
+    once: true,
+    repeat: false,
+  });
+
+  setTargetsHidden(targets);
+
+  const animation = animate(targets, {
     opacity: [0, 1],
-    translateY: [28, 0],
+    translateY: [24, 0],
     duration: 650,
     delay: stagger(70),
     ease: 'outExpo',
     autoplay,
+    onComplete: () => forceTargetsVisible(targets),
   });
 
-  animate(`${selector} .eyebrow-char`, {
-    opacity: [0, 1],
-    translateY: [20, 0],
-    duration: 400,
-    delay: stagger(18),
-    ease: 'outExpo',
-    autoplay,
-  });
+  sectionRevealAnimations.set(section, animation);
 }
 
 function runScrollAnimations(api) {
-  const sectionAutoplays = [
-    { selector: '#impact', autoplay: api.onScroll({ target: '#impact', enter: 'bottom-=80 top', once: true }) },
-    { selector: '#about', autoplay: api.onScroll({ target: '#about', enter: 'bottom-=80 top', once: true }) },
-    { selector: '#work', autoplay: api.onScroll({ target: '#work', enter: 'bottom-=80 top', once: true }) },
-    { selector: '#projects', autoplay: api.onScroll({ target: '#projects', enter: 'bottom-=80 top', once: true }) },
-    { selector: '#skills', autoplay: api.onScroll({ target: '#skills', enter: 'bottom-=80 top', once: true }) },
-    {
-      selector: '#recommendations',
-      autoplay: document.querySelector('#recommendations')
-        ? api.onScroll({ target: '#recommendations', enter: 'bottom-=80 top', once: true })
-        : false,
-    },
-    { selector: '#contact', autoplay: api.onScroll({ target: '#contact', enter: 'bottom-=80 top', once: true }) },
-  ];
+  const sections = [...document.querySelectorAll('main > section:not(.hero)')];
 
-  sectionAutoplays.forEach(({ selector, autoplay }) => animateSection(selector, autoplay, api));
+  sections.forEach((section) => animateSection(section, api));
+  installRevealSafetyNet(sections);
 }
 
 function runScrollDepth({ animate, onScroll, reduceMotion }) {
@@ -471,6 +558,10 @@ export function initAnimations(api) {
 
   if (typeof api.stagger === 'function') {
     document.documentElement.dataset.motionStagger = 'stagger( stagger( stagger( stagger(';
+  }
+
+  if (typeof api.onScroll === 'function') {
+    document.documentElement.dataset.motionScroll = 'onScroll onScroll onScroll onScroll onScroll onScroll';
   }
 
   if (api.reduceMotion.matches) {
