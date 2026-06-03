@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 560" role="img" aria-labelledby="title desc">
+  <title id="title">Abstract identity field</title>
+  <desc id="desc">A precise grid-based personal brand graphic with layered initials and accent lines.</desc>
+  <rect width="560" height="560" rx="8" fill="#0d0f16"/>
+  <g opacity=".22" stroke="#f4f7fb">
+    <path d="M0 70h560M0 140h560M0 210h560M0 280h560M0 350h560M0 420h560M0 490h560"/>
+    <path d="M70 0v560M140 0v560M210 0v560M280 0v560M350 0v560M420 0v560M490 0v560"/>
+  </g>
+  <g fill="none" stroke-width="2">
+    <path d="M84 84h392v392H84z" stroke="#37ffb3"/>
+    <path d="M116 116h328v328H116z" stroke="#73a7ff" opacity=".76"/>
+    <path d="M148 148h264v264H148z" stroke="#ff4d8d" opacity=".62"/>
+  </g>
+  <g fill="#37ffb3">
+    <circle cx="84" cy="84" r="5"/>
+    <circle cx="476" cy="84" r="5"/>
+    <circle cx="84" cy="476" r="5"/>
+    <circle cx="476" cy="476" r="5"/>
+  </g>
+  <path d="M170 160h68v208c0 70-37 102-104 102-16 0-33-2-48-7l8-59c10 3 22 5 34 5 29 0 42-14 42-48V160z" fill="#f4f7fb"/>
+  <path d="M282 160h106c64 0 103 31 103 85 0 29-15 52-39 64 33 11 54 38 54 75 0 63-47 98-120 98H282V160zm68 57v70h37c24 0 38-13 38-35 0-21-15-35-40-35h-35zm0 122v86h44c28 0 45-15 45-43 0-27-17-43-46-43h-43z" fill="#f4f7fb"/>
+  <path d="M112 520h336" stroke="#37ffb3" stroke-width="8" stroke-linecap="round"/>
+</svg>

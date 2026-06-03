@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Jordan Buck</title>
+  <desc id="desc">Open Graph preview image for jordanbuck.me.</desc>
+  <rect width="1200" height="630" fill="#090a0f"/>
+  <g opacity=".18" stroke="#f4f7fb">
+    <path d="M0 90h1200M0 180h1200M0 270h1200M0 360h1200M0 450h1200M0 540h1200"/>
+    <path d="M120 0v630M240 0v630M360 0v630M480 0v630M600 0v630M720 0v630M840 0v630M960 0v630M1080 0v630"/>
+  </g>
+  <rect x="72" y="72" width="1056" height="486" rx="8" fill="none" stroke="#37ffb3" stroke-width="3"/>
+  <text x="104" y="186" fill="#37ffb3" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="30" font-weight="700">jordanbuck.me</text>
+  <text x="104" y="326" fill="#f4f7fb" font-family="Inter, Arial, sans-serif" font-size="104" font-weight="800">Jordan Buck</text>
+  <text x="108" y="394" fill="#a6adba" font-family="Inter, Arial, sans-serif" font-size="34">Enterprise IT leadership, practical AI adoption,</text>
+  <text x="108" y="438" fill="#a6adba" font-family="Inter, Arial, sans-serif" font-size="34">and automation built around measurable outcomes.</text>
+  <circle cx="1038" cy="170" r="42" fill="#37ffb3"/>
+  <circle cx="1010" cy="208" r="22" fill="#ff4d8d"/>
+  <circle cx="1074" cy="220" r="28" fill="#73a7ff"/>
+</svg>
