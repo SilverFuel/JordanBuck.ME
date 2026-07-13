@@ -317,60 +317,6 @@ function wireHeroGridReactivity({ animate, reduceMotion }) {
   window.addEventListener('resize', refreshRects, { passive: true });
 }
 
-function wireHeadshotParallax({ animate, utils, reduceMotion }) {
-  const hero = document.querySelector('.hero');
-  const frame = document.querySelector('.headshot-frame');
-
-  if (!hero || !frame || reduceMotion.matches) {
-    return;
-  }
-
-  let queuedEvent = null;
-  let raf = 0;
-
-  const updateTilt = () => {
-    raf = 0;
-
-    if (!queuedEvent) {
-      return;
-    }
-
-    const rect = hero.getBoundingClientRect();
-    const percentX = ((queuedEvent.clientX - rect.left) / rect.width - 0.5) * 2;
-    const percentY = ((queuedEvent.clientY - rect.top) / rect.height - 0.5) * 2;
-    const translateX = utils.clamp(percentX * 6, -6, 6);
-    const translateY = utils.clamp(percentY * 6, -6, 6);
-    const rotate = utils.clamp(percentX * 2, -2, 2);
-
-    animate(frame, {
-      translateX,
-      translateY,
-      rotate,
-      duration: 260,
-      ease: 'outQuad',
-    });
-  };
-
-  hero.addEventListener('pointermove', (event) => {
-    queuedEvent = event;
-
-    if (!raf) {
-      raf = requestAnimationFrame(updateTilt);
-    }
-  });
-
-  hero.addEventListener('pointerleave', () => {
-    queuedEvent = null;
-    animate(frame, {
-      translateX: 0,
-      translateY: 0,
-      rotate: 0,
-      duration: 420,
-      ease: 'outExpo',
-    });
-  });
-}
-
 function wireDraggableSignature({ createDraggable, animate, spring, reduceMotion }) {
   const token = document.querySelector('.nav__brand span:first-child');
 
@@ -452,15 +398,6 @@ function runIntro({ createTimeline, stagger }) {
       '-=500',
     )
     .add(
-      '.hero__signal',
-      {
-        opacity: [0, 1],
-        translateY: [34, 0],
-        scale: { from: 0.94, to: 1 },
-      },
-      '-=650',
-    )
-    .add(
       '.grid-field span',
       {
         opacity: { from: 0.12, to: 0.74 },
@@ -538,14 +475,6 @@ function runAmbientMotion({ animate, stagger, reduceMotion }) {
     ease: 'inOutSine',
   });
 
-  animate('.headshot-image', {
-    rotate: { from: '-1.2deg', to: '1.8deg' },
-    scale: { from: 0.985, to: 1.035 },
-    duration: 2800,
-    alternate: true,
-    loop: true,
-    ease: 'inOutSine',
-  });
 }
 
 export function initAnimations(api) {
@@ -574,7 +503,6 @@ export function initAnimations(api) {
   runScrollDepth(api);
   runAmbientMotion(api);
   wireHeroGridReactivity(api);
-  wireHeadshotParallax(api);
   wireCardPhysics(api);
   wireDraggableSignature(api);
   wireMagneticHover(api);

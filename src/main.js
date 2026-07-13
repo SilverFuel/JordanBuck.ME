@@ -152,6 +152,7 @@ function initProjectCarousel() {
   const nextButton = carousel.querySelector('[data-project-next]');
   const currentLabel = carousel.querySelector('[data-project-current]');
   const totalLabel = carousel.querySelector('[data-project-total]');
+  const pagination = carousel.querySelector('[data-project-pagination]');
 
   if (!viewport || !track || !slides.length) {
     return;
@@ -165,6 +166,20 @@ function initProjectCarousel() {
   let dragMoved = false;
   let navigationTimer = 0;
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const paginationButtons = slides.map((slide, index) => {
+    const button = document.createElement('button');
+    const projectName = slide.querySelector('h3')?.textContent?.trim() || `project ${index + 1}`;
+
+    button.className = 'project-carousel__scrubber-button';
+    button.type = 'button';
+    button.setAttribute('aria-label', `Show ${projectName}`);
+    button.title = projectName;
+    button.addEventListener('click', () => goTo(index));
+
+    return button;
+  });
+
+  pagination?.replaceChildren(...paginationButtons);
 
   const slideOffset = (slide) => slide.offsetLeft - track.offsetLeft;
   const findNearestIndex = () => {
@@ -206,6 +221,14 @@ function initProjectCarousel() {
         slide.removeAttribute('aria-current');
       }
       slide.dataset.projectIndex = String(index + 1).padStart(2, '0');
+    });
+
+    paginationButtons.forEach((button, index) => {
+      if (index === activeIndex) {
+        button.setAttribute('aria-current', 'true');
+      } else {
+        button.removeAttribute('aria-current');
+      }
     });
 
     if (previousButton) {
@@ -258,12 +281,8 @@ function initProjectCarousel() {
   viewport.addEventListener('dragstart', (event) => event.preventDefault());
 
   slides.forEach((slide) => {
-    const resetDepth = () => {
+    const resetHighlight = () => {
       slide.style.setProperty('--pointer-x', '50%');
-      slide.style.setProperty('--media-shift-x', '0px');
-      slide.style.setProperty('--media-shift-y', '0px');
-      slide.style.setProperty('--media-rotate-x', '0deg');
-      slide.style.setProperty('--media-rotate-y', '0deg');
     };
 
     slide.addEventListener('pointermove', (event) => {
@@ -273,17 +292,12 @@ function initProjectCarousel() {
 
       const rect = slide.getBoundingClientRect();
       const normalizedX = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
-      const normalizedY = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
 
       slide.style.setProperty('--pointer-x', `${((normalizedX + 1) / 2) * 100}%`);
-      slide.style.setProperty('--media-shift-x', `${normalizedX * -5}px`);
-      slide.style.setProperty('--media-shift-y', `${normalizedY * -4}px`);
-      slide.style.setProperty('--media-rotate-x', `${normalizedY * -1.15}deg`);
-      slide.style.setProperty('--media-rotate-y', `${normalizedX * 1.15}deg`);
     });
 
-    slide.addEventListener('pointerleave', resetDepth);
-    resetDepth();
+    slide.addEventListener('pointerleave', resetHighlight);
+    resetHighlight();
   });
 
   viewport.addEventListener('pointerdown', (event) => {

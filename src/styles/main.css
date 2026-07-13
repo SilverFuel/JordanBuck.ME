@@ -597,7 +597,6 @@ button {
     linear-gradient(135deg, rgba(55, 255, 179, 0.1), transparent 44%),
     rgba(255, 255, 255, 0.04);
   box-shadow: var(--shadow);
-  will-change: transform;
 }
 
 .headshot-image {
@@ -869,11 +868,6 @@ button {
 }
 
 .project-card {
-  --media-rotate-x: 0deg;
-  --media-rotate-y: 0deg;
-  --media-scale: 0.985;
-  --media-shift-x: 0px;
-  --media-shift-y: 0px;
   --pointer-x: 50%;
   flex: 0 0 calc((100% - 1rem) / 2);
   min-height: 0;
@@ -924,10 +918,6 @@ button {
   box-shadow: 0 20px 54px rgba(0, 0, 0, 0.22), inset 0 1px rgba(255, 255, 255, 0.045);
 }
 
-.project-card[aria-current] {
-  --media-scale: 1;
-}
-
 .project-card:not([aria-current]) .project-card__media {
   filter: saturate(0.72) brightness(0.8);
 }
@@ -964,10 +954,7 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: calc(var(--radius) - 2px);
   background: #0c0e14;
-  transform: perspective(900px) translate3d(var(--media-shift-x), var(--media-shift-y), 0) rotateX(var(--media-rotate-x)) rotateY(var(--media-rotate-y)) scale(var(--media-scale));
-  transform-origin: center;
-  transition: border-color 420ms ease, filter 420ms ease, transform 300ms ease;
-  will-change: transform;
+  transition: border-color 420ms ease, filter 420ms ease;
 }
 
 .project-card[aria-current] .project-card__media {
@@ -980,12 +967,6 @@ button {
   object-fit: cover;
   user-select: none;
   -webkit-user-drag: none;
-  transition: transform 520ms ease;
-}
-
-.project-card:hover .project-card__media--image img,
-.project-card[aria-current] .project-card__media--image img {
-  transform: scale(1.025);
 }
 
 .project-card__media--bench-path {
@@ -1010,24 +991,6 @@ button {
   object-position: center 61%;
   user-select: none;
   -webkit-user-drag: none;
-  transition: transform 420ms ease;
-}
-
-.project-card:hover .project-card__media--bench-path img,
-.project-card[aria-current] .project-card__media--bench-path img {
-  transform: scale(1.025);
-}
-
-.project-card__media--homeos .homeos-visual,
-.project-card__media--offgrid .offgrid-visual {
-  transition: transform 520ms ease;
-}
-
-.project-card:hover .homeos-visual,
-.project-card[aria-current] .homeos-visual,
-.project-card:hover .offgrid-visual,
-.project-card[aria-current] .offgrid-visual {
-  transform: scale(1.025);
 }
 
 .bench-path-visual__label {
@@ -1268,6 +1231,47 @@ button {
 .project-carousel__status [data-project-current] {
   color: var(--accent-3);
   will-change: transform, opacity;
+}
+
+.project-carousel__scrubber {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+}
+
+.project-carousel__scrubber-button {
+  position: relative;
+  width: 30px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.project-carousel__scrubber-button::before {
+  position: absolute;
+  top: 50%;
+  right: 3px;
+  left: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  content: "";
+  transform: translateY(-50%);
+  transition: background 220ms ease, transform 220ms ease;
+}
+
+.project-carousel__scrubber-button:hover::before {
+  background: rgba(115, 167, 255, 0.62);
+}
+
+.project-carousel__scrubber-button[aria-current]::before {
+  background: var(--accent-3);
+  transform: translateY(-50%) scaleY(1.8);
 }
 
 .project-carousel__buttons {
