@@ -75,10 +75,25 @@ const sections = [...document.querySelectorAll('main section[id]')];
 const year = document.querySelector('[data-year]');
 const copyEmailButton = document.querySelector('[data-copy-email]');
 const copyStatus = document.querySelector('[data-copy-status]');
+const sectionIndexCurrent = document.querySelector('[data-section-current]');
+const sectionIndexTotal = document.querySelector('[data-section-total]');
+const sectionIndexLabel = document.querySelector('[data-section-label]');
+const sectionLabels = {
+  hero: 'Intro',
+  impact: 'Scope',
+  about: 'About',
+  work: 'Impact',
+  projects: 'Projects',
+  skills: 'Skills',
+  contact: 'Contact',
+};
 
 document.documentElement.classList.add('js-ready');
 if (year) {
   year.textContent = new Date().getFullYear();
+}
+if (sectionIndexTotal) {
+  sectionIndexTotal.textContent = String(sections.length).padStart(2, '0');
 }
 
 function setNavOpen(isOpen) {
@@ -123,6 +138,152 @@ copyEmailButton?.addEventListener('click', async () => {
   }, 2200);
 });
 
+function initProjectCarousel() {
+  const carousel = document.querySelector('[data-project-carousel]');
+
+  if (!carousel) {
+    return;
+  }
+
+  const viewport = carousel.querySelector('[data-project-viewport]');
+  const track = carousel.querySelector('[data-project-track]');
+  const slides = [...carousel.querySelectorAll('[data-project-slide]')];
+  const previousButton = carousel.querySelector('[data-project-prev]');
+  const nextButton = carousel.querySelector('[data-project-next]');
+  const currentLabel = carousel.querySelector('[data-project-current]');
+  const totalLabel = carousel.querySelector('[data-project-total]');
+
+  if (!viewport || !track || !slides.length) {
+    return;
+  }
+
+  let activeIndex = 0;
+  let updateFrame = 0;
+  let dragPointerId = null;
+  let dragStartX = 0;
+  let dragStartScroll = 0;
+  let dragMoved = false;
+
+  const slideOffset = (slide) => slide.offsetLeft - track.offsetLeft;
+  const findNearestIndex = () => {
+    return slides.reduce((nearest, slide, index) => {
+      const currentDistance = Math.abs(slideOffset(slide) - viewport.scrollLeft);
+      const nearestDistance = Math.abs(slideOffset(slides[nearest]) - viewport.scrollLeft);
+
+      return currentDistance < nearestDistance ? index : nearest;
+    }, 0);
+  };
+
+  const renderState = () => {
+    updateFrame = 0;
+    activeIndex = findNearestIndex();
+
+    if (currentLabel) {
+      currentLabel.textContent = String(activeIndex + 1).padStart(2, '0');
+    }
+    if (totalLabel) {
+      totalLabel.textContent = String(slides.length).padStart(2, '0');
+    }
+
+    slides.forEach((slide, index) => {
+      slide.toggleAttribute('aria-current', index === activeIndex);
+    });
+
+    if (previousButton) {
+      previousButton.disabled = activeIndex === 0;
+    }
+    if (nextButton) {
+      nextButton.disabled = activeIndex === slides.length - 1;
+    }
+  };
+
+  const queueStateUpdate = () => {
+    if (!updateFrame) {
+      updateFrame = requestAnimationFrame(renderState);
+    }
+  };
+
+  const goTo = (index) => {
+    const nextIndex = Math.min(Math.max(index, 0), slides.length - 1);
+
+    viewport.scrollTo({
+      left: slideOffset(slides[nextIndex]),
+      behavior: reduceMotion.matches ? 'auto' : 'smooth',
+    });
+  };
+
+  previousButton?.addEventListener('click', () => goTo(activeIndex - 1));
+  nextButton?.addEventListener('click', () => goTo(activeIndex + 1));
+
+  viewport.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      goTo(activeIndex - 1);
+    }
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      goTo(activeIndex + 1);
+    }
+  });
+
+  viewport.addEventListener('scroll', queueStateUpdate, { passive: true });
+  viewport.addEventListener('dragstart', (event) => event.preventDefault());
+
+  viewport.addEventListener('pointerdown', (event) => {
+    if (event.pointerType !== 'mouse' || event.button !== 0) {
+      return;
+    }
+
+    dragPointerId = event.pointerId;
+    dragStartX = event.clientX;
+    dragStartScroll = viewport.scrollLeft;
+    dragMoved = false;
+    viewport.classList.add('is-dragging');
+    viewport.setPointerCapture(event.pointerId);
+  });
+
+  viewport.addEventListener('pointermove', (event) => {
+    if (event.pointerId !== dragPointerId) {
+      return;
+    }
+
+    const delta = event.clientX - dragStartX;
+    dragMoved ||= Math.abs(delta) > 4;
+    viewport.scrollLeft = dragStartScroll - delta;
+
+    if (dragMoved) {
+      event.preventDefault();
+    }
+  });
+
+  const releaseDrag = (event) => {
+    if (event.pointerId !== dragPointerId) {
+      return;
+    }
+
+    if (viewport.hasPointerCapture?.(event.pointerId)) {
+      viewport.releasePointerCapture(event.pointerId);
+    }
+    viewport.classList.remove('is-dragging');
+    dragPointerId = null;
+
+    if (dragMoved) {
+      goTo(findNearestIndex());
+    }
+  };
+
+  viewport.addEventListener('pointerup', releaseDrag);
+  viewport.addEventListener('pointercancel', releaseDrag);
+
+  const carouselResizeObserver = new ResizeObserver(() => {
+    goTo(activeIndex);
+    queueStateUpdate();
+  });
+  carouselResizeObserver.observe(viewport);
+
+  renderState();
+}
+
 function moveIndicator(link) {
   if (!indicator || !link || window.matchMedia('(max-width: 719px)').matches) {
     if (indicator) {
@@ -140,15 +301,26 @@ function moveIndicator(link) {
 
 function updateActiveNav() {
   const activationLine = window.innerHeight < 760 ? 150 : window.innerHeight * 0.34;
-  const activeSection = sections.reduce((current, section) => {
-    return section.getBoundingClientRect().top <= activationLine ? section : current;
-  }, sections[0]);
+  const atPageEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+  const activeSection = atPageEnd
+    ? sections.at(-1)
+    : sections.reduce((current, section) => {
+        return section.getBoundingClientRect().top <= activationLine ? section : current;
+      }, sections[0]);
   const activeLink = navLinks.find((link) => link.hash === `#${activeSection.id}`);
 
   navLinks.forEach((link) => {
     link.toggleAttribute('aria-current', link === activeLink);
   });
   moveIndicator(activeLink);
+
+  const sectionIndex = sections.indexOf(activeSection);
+  if (sectionIndexCurrent) {
+    sectionIndexCurrent.textContent = String(sectionIndex + 1).padStart(2, '0');
+  }
+  if (sectionIndexLabel) {
+    sectionIndexLabel.textContent = sectionLabels[activeSection.id] ?? activeSection.id;
+  }
 }
 
 function updateScrollProgress() {
@@ -196,5 +368,6 @@ initAnimations({
   reduceMotion,
 });
 
+initProjectCarousel();
 updateActiveNav();
 updateScrollProgress();

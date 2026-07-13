@@ -50,6 +50,14 @@
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="scroll-progress" aria-hidden="true" data-scroll-progress></div>
+    <aside class="section-index" aria-label="Current section" data-section-index>
+      <span class="section-index__count">
+        <span data-section-current>01</span>
+        <span aria-hidden="true">/</span>
+        <span data-section-total>07</span>
+      </span>
+      <span class="section-index__label" data-section-label>Intro</span>
+    </aside>
 
     <header class="site-header" data-header>
       <nav class="nav shell" aria-label="Primary navigation">
@@ -206,35 +214,96 @@
             <h2 class="section-title glyph-title" id="projects-title" data-split-text>Stuff I've built</h2>
             <p class="lead reveal-line">Side projects, mostly built at night. I see something I want, it doesn't exist the way I'd want it, so I build it. Lately AI has let me pull off things I wouldn't have had the time — or the depth — to build on my own.</p>
           </div>
-          <div class="project-grid" data-card-grid>
-            <article class="project-card reveal-card magnetic">
-              <div class="project-card__media" role="img" aria-label="HomeOS wall display image slot" data-image-slot="/projects/homeos.jpg"></div>
-              <h3>HomeOS</h3>
-              <p>I wanted a home dashboard but didn't want to pay a subscription for one, so I built my own. A Raspberry Pi on the wall running Home Assistant scenes, camera feeds, and an ambient/focus mode. I actually use this one every day.</p>
-              <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
-              <!-- Owner slot: Add public/projects/homeos.jpg and replace the hidden link href when ready. -->
-            </article>
-            <article class="project-card reveal-card magnetic">
-              <div class="project-card__media" role="img" aria-label="MissionBoard operations dashboard image slot" data-image-slot="/projects/missionboard.jpg"></div>
-              <h3>MissionBoard</h3>
-              <p>A command center for IT operations teams — projects, escalations, and status in one place. Built straight out of the Tier 3 problems I live with.</p>
-              <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
-              <!-- Owner slot: Add public/projects/missionboard.jpg and replace the hidden link href when ready. -->
-            </article>
-            <article class="project-card reveal-card magnetic">
-              <div class="project-card__media" role="img" aria-label="PrintDeck model catalog image slot" data-image-slot="/projects/printdeck.jpg"></div>
-              <h3>PrintDeck</h3>
-              <p>An STL library and filament tracker for my Bambu printers, with AI vision to tag models so I stop losing them.</p>
-              <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
-              <!-- Owner slot: Add public/projects/printdeck.jpg and replace the hidden link href when ready. -->
-            </article>
-            <article class="project-card reveal-card magnetic">
-              <div class="project-card__media" role="img" aria-label="OffGridIQ air-quality device image slot" data-image-slot="/projects/offgridiq.jpg"></div>
-              <h3>OffGridIQ</h3>
-              <p>A 3D-printable desk air-quality monitor. A product experiment, start to finish.</p>
-              <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
-              <!-- Owner slot: Add public/projects/offgridiq.jpg and replace the hidden link href when ready. -->
-            </article>
+          <div
+            class="project-carousel"
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="Selected projects"
+            aria-describedby="project-carousel-instructions"
+            data-project-carousel
+          >
+            <p class="visually-hidden" id="project-carousel-instructions">Use the previous and next buttons or the left and right arrow keys to browse projects.</p>
+            <div class="project-carousel__viewport" tabindex="0" data-project-viewport>
+              <div class="project-grid" data-card-grid data-project-track>
+                <article class="project-card reveal-card magnetic" data-project-slide>
+                  <div class="project-card__media project-card__media--homeos" role="img" aria-label="HomeOS family wall dashboard showing weather, camera, and scene controls">
+                    <div class="homeos-visual" aria-hidden="true">
+                      <div class="homeos-visual__topline">
+                        <span>Family Hub</span>
+                        <strong>7:42</strong>
+                      </div>
+                      <div class="homeos-visual__grid">
+                        <div class="homeos-visual__weather">
+                          <span>Indianapolis</span>
+                          <strong>72°</strong>
+                          <small>Clear · 0% rain</small>
+                        </div>
+                        <div class="homeos-visual__camera">
+                          <span>Front door</span>
+                          <strong>Online</strong>
+                        </div>
+                        <div class="homeos-visual__scenes">
+                          <span>Scenes</span>
+                          <i></i><i></i><i></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <h3>HomeOS</h3>
+                  <p>I wanted a home dashboard but didn't want to pay a subscription for one, so I built my own. A Raspberry Pi on the wall running Home Assistant scenes, camera feeds, and an ambient/focus mode. I actually use this one every day.</p>
+                  <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
+                </article>
+                <article class="project-card reveal-card magnetic" data-project-slide>
+                  <div class="project-card__media project-card__media--image">
+                    <img src="/projects/missionboard.png" alt="MissionBoard portfolio overview dashboard" loading="lazy" decoding="async">
+                  </div>
+                  <h3>MissionBoard</h3>
+                  <p>A command center for IT operations teams — projects, escalations, and status in one place. Built straight out of the Tier 3 problems I live with.</p>
+                  <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
+                </article>
+                <article class="project-card reveal-card magnetic" data-project-slide>
+                  <div class="project-card__media project-card__media--image">
+                    <img src="/projects/printdeck.png" alt="PrintDeck 3D printer and AI-assisted model catalog" loading="lazy" decoding="async">
+                  </div>
+                  <h3>PrintDeck</h3>
+                  <p>An STL library and filament tracker for my Bambu printers, with AI vision to tag models so I stop losing them.</p>
+                  <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
+                </article>
+                <article class="project-card reveal-card magnetic" data-project-slide>
+                  <div class="project-card__media project-card__media--offgrid" role="img" aria-label="OffGridIQ air-quality monitor concept showing AQI, carbon dioxide, temperature, and humidity readings">
+                    <div class="offgrid-visual" aria-hidden="true">
+                      <div class="offgrid-device">
+                        <span class="offgrid-device__brand">OFFGRID / IQ</span>
+                        <div class="offgrid-device__reading">
+                          <strong>42</strong>
+                          <span>AQI · GOOD</span>
+                        </div>
+                        <div class="offgrid-device__stats">
+                          <span>CO₂ <strong>612</strong></span>
+                          <span>Temp <strong>71°</strong></span>
+                          <span>RH <strong>43%</strong></span>
+                        </div>
+                      </div>
+                      <div class="offgrid-visual__signal"><i></i><i></i><i></i></div>
+                    </div>
+                  </div>
+                  <h3>OffGridIQ</h3>
+                  <p>A 3D-printable desk air-quality monitor. A product experiment, start to finish.</p>
+                  <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
+                </article>
+              </div>
+            </div>
+            <div class="project-carousel__controls">
+              <p class="project-carousel__status" aria-live="polite">
+                <span data-project-current>01</span>
+                <span aria-hidden="true">/</span>
+                <span data-project-total>04</span>
+              </p>
+              <div class="project-carousel__buttons">
+                <button class="project-carousel__button magnetic" type="button" aria-label="Previous project" title="Previous project" data-project-prev>&larr;</button>
+                <button class="project-carousel__button magnetic" type="button" aria-label="Next project" title="Next project" data-project-next>&rarr;</button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
