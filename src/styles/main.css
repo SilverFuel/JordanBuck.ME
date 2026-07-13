@@ -17,6 +17,7 @@
   --accent: #37ffb3;
   --accent-2: #ff4d8d;
   --accent-3: #73a7ff;
+  --section-rgb: 55, 255, 179;
   --shadow: 0 22px 80px rgba(0, 0, 0, 0.4);
   --radius: 8px;
   --shell: min(1120px, calc(100vw - 32px));
@@ -62,6 +63,15 @@ html {
 
   .project-carousel__viewport {
     scroll-behavior: auto;
+  }
+
+  .project-card,
+  .project-card__media,
+  .project-card__media img,
+  .homeos-visual,
+  .offgrid-visual {
+    filter: none !important;
+    transform: none !important;
   }
 }
 
@@ -346,6 +356,44 @@ button {
   scroll-margin-top: var(--header-height);
 }
 
+.section::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(108deg, rgba(var(--section-rgb), 0.055), transparent 38%, transparent 72%, rgba(var(--section-rgb), 0.02));
+  opacity: 0.12;
+  transition: opacity 700ms ease;
+}
+
+.section.is-active-section::before {
+  opacity: 1;
+}
+
+.section > .shell {
+  position: relative;
+  z-index: 1;
+}
+
+#hero,
+#work,
+#contact {
+  --section-rgb: 55, 255, 179;
+}
+
+#impact {
+  --section-rgb: 255, 199, 94;
+}
+
+#about,
+#projects {
+  --section-rgb: 115, 167, 255;
+}
+
+#skills {
+  --section-rgb: 255, 77, 141;
+}
+
 .hero {
   display: grid;
   min-height: 74vh;
@@ -386,6 +434,7 @@ button {
 
 .hero__title {
   font-size: clamp(4rem, 9.4vw, 6.8rem);
+  text-shadow: 0 16px 52px rgba(115, 167, 255, 0.1);
 }
 
 .section-title {
@@ -820,16 +869,71 @@ button {
 }
 
 .project-card {
+  --media-rotate-x: 0deg;
+  --media-rotate-y: 0deg;
+  --media-scale: 0.985;
+  --media-shift-x: 0px;
+  --media-shift-y: 0px;
+  --pointer-x: 50%;
   flex: 0 0 calc((100% - 1rem) / 2);
   min-height: 0;
   scroll-snap-align: start;
   scroll-snap-stop: always;
-  transition: border-color 180ms ease, background 180ms ease;
+  transition: border-color 420ms ease, background 420ms ease, box-shadow 420ms ease;
 }
 
-.project-card:hover {
+.project-card::before {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(112deg, transparent calc(var(--pointer-x) - 24%), rgba(255, 255, 255, 0.075) var(--pointer-x), transparent calc(var(--pointer-x) + 24%));
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+
+.project-card::after {
+  position: absolute;
+  z-index: 0;
+  right: 0.7rem;
+  bottom: -0.58rem;
+  content: attr(data-project-index);
+  color: rgba(255, 255, 255, 0.035);
+  font-family: ui-monospace, "SFMono-Regular", "Roboto Mono", Consolas, monospace;
+  font-size: clamp(3.8rem, 7vw, 5.8rem);
+  font-weight: 800;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.project-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.project-card:hover::before,
+.project-card[aria-current]::before {
+  opacity: 1;
+}
+
+.project-card:hover,
+.project-card[aria-current] {
   border-color: rgba(115, 167, 255, 0.46);
   background: linear-gradient(180deg, rgba(115, 167, 255, 0.1), rgba(255, 255, 255, 0.03));
+  box-shadow: 0 20px 54px rgba(0, 0, 0, 0.22), inset 0 1px rgba(255, 255, 255, 0.045);
+}
+
+.project-card[aria-current] {
+  --media-scale: 1;
+}
+
+.project-card:not([aria-current]) .project-card__media {
+  filter: saturate(0.72) brightness(0.8);
+}
+
+.project-card:not([aria-current]) h3 {
+  color: var(--soft);
 }
 
 .project-card h3,
@@ -840,6 +944,7 @@ button {
 .project-card h3 {
   font-size: 1.28rem;
   line-height: 1.2;
+  transition: color 360ms ease;
 }
 
 .project-card p {
@@ -859,6 +964,14 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: calc(var(--radius) - 2px);
   background: #0c0e14;
+  transform: perspective(900px) translate3d(var(--media-shift-x), var(--media-shift-y), 0) rotateX(var(--media-rotate-x)) rotateY(var(--media-rotate-y)) scale(var(--media-scale));
+  transform-origin: center;
+  transition: border-color 420ms ease, filter 420ms ease, transform 300ms ease;
+  will-change: transform;
+}
+
+.project-card[aria-current] .project-card__media {
+  border-color: rgba(115, 167, 255, 0.32);
 }
 
 .project-card__media--image img {
@@ -867,11 +980,12 @@ button {
   object-fit: cover;
   user-select: none;
   -webkit-user-drag: none;
-  transition: transform 420ms ease;
+  transition: transform 520ms ease;
 }
 
-.project-card:hover .project-card__media--image img {
-  transform: scale(1.018);
+.project-card:hover .project-card__media--image img,
+.project-card[aria-current] .project-card__media--image img {
+  transform: scale(1.025);
 }
 
 .project-card__media--bench-path {
@@ -899,8 +1013,21 @@ button {
   transition: transform 420ms ease;
 }
 
-.project-card:hover .project-card__media--bench-path img {
-  transform: scale(1.018);
+.project-card:hover .project-card__media--bench-path img,
+.project-card[aria-current] .project-card__media--bench-path img {
+  transform: scale(1.025);
+}
+
+.project-card__media--homeos .homeos-visual,
+.project-card__media--offgrid .offgrid-visual {
+  transition: transform 520ms ease;
+}
+
+.project-card:hover .homeos-visual,
+.project-card[aria-current] .homeos-visual,
+.project-card:hover .offgrid-visual,
+.project-card[aria-current] .offgrid-visual {
+  transform: scale(1.025);
 }
 
 .bench-path-visual__label {
@@ -1140,6 +1267,7 @@ button {
 
 .project-carousel__status [data-project-current] {
   color: var(--accent-3);
+  will-change: transform, opacity;
 }
 
 .project-carousel__buttons {

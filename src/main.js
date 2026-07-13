@@ -163,6 +163,8 @@ function initProjectCarousel() {
   let dragStartX = 0;
   let dragStartScroll = 0;
   let dragMoved = false;
+  let navigationTimer = 0;
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
   const slideOffset = (slide) => slide.offsetLeft - track.offsetLeft;
   const findNearestIndex = () => {
@@ -176,17 +178,34 @@ function initProjectCarousel() {
 
   const renderState = () => {
     updateFrame = 0;
-    activeIndex = findNearestIndex();
+    const nextActiveIndex = findNearestIndex();
+    const activeChanged = nextActiveIndex !== activeIndex;
+
+    activeIndex = nextActiveIndex;
 
     if (currentLabel) {
       currentLabel.textContent = String(activeIndex + 1).padStart(2, '0');
+
+      if (activeChanged && !reduceMotion.matches) {
+        animate(currentLabel, {
+          opacity: [0.25, 1],
+          translateY: [7, 0],
+          duration: 360,
+          ease: 'outExpo',
+        });
+      }
     }
     if (totalLabel) {
       totalLabel.textContent = String(slides.length).padStart(2, '0');
     }
 
     slides.forEach((slide, index) => {
-      slide.toggleAttribute('aria-current', index === activeIndex);
+      if (index === activeIndex) {
+        slide.setAttribute('aria-current', 'true');
+      } else {
+        slide.removeAttribute('aria-current');
+      }
+      slide.dataset.projectIndex = String(index + 1).padStart(2, '0');
     });
 
     if (previousButton) {
@@ -205,6 +224,10 @@ function initProjectCarousel() {
 
   const goTo = (index) => {
     const nextIndex = Math.min(Math.max(index, 0), slides.length - 1);
+
+    carousel.classList.add('is-navigating');
+    window.clearTimeout(navigationTimer);
+    navigationTimer = window.setTimeout(() => carousel.classList.remove('is-navigating'), 800);
 
     viewport.scrollTo({
       left: slideOffset(slides[nextIndex]),
@@ -227,7 +250,41 @@ function initProjectCarousel() {
   });
 
   viewport.addEventListener('scroll', queueStateUpdate, { passive: true });
+  viewport.addEventListener('scrollend', () => {
+    window.clearTimeout(navigationTimer);
+    carousel.classList.remove('is-navigating');
+    renderState();
+  });
   viewport.addEventListener('dragstart', (event) => event.preventDefault());
+
+  slides.forEach((slide) => {
+    const resetDepth = () => {
+      slide.style.setProperty('--pointer-x', '50%');
+      slide.style.setProperty('--media-shift-x', '0px');
+      slide.style.setProperty('--media-shift-y', '0px');
+      slide.style.setProperty('--media-rotate-x', '0deg');
+      slide.style.setProperty('--media-rotate-y', '0deg');
+    };
+
+    slide.addEventListener('pointermove', (event) => {
+      if (reduceMotion.matches || !finePointer.matches) {
+        return;
+      }
+
+      const rect = slide.getBoundingClientRect();
+      const normalizedX = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+      const normalizedY = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+
+      slide.style.setProperty('--pointer-x', `${((normalizedX + 1) / 2) * 100}%`);
+      slide.style.setProperty('--media-shift-x', `${normalizedX * -5}px`);
+      slide.style.setProperty('--media-shift-y', `${normalizedY * -4}px`);
+      slide.style.setProperty('--media-rotate-x', `${normalizedY * -1.15}deg`);
+      slide.style.setProperty('--media-rotate-y', `${normalizedX * 1.15}deg`);
+    });
+
+    slide.addEventListener('pointerleave', resetDepth);
+    resetDepth();
+  });
 
   viewport.addEventListener('pointerdown', (event) => {
     if (event.pointerType !== 'mouse' || event.button !== 0) {
@@ -308,6 +365,10 @@ function updateActiveNav() {
         return section.getBoundingClientRect().top <= activationLine ? section : current;
       }, sections[0]);
   const activeLink = navLinks.find((link) => link.hash === `#${activeSection.id}`);
+
+  sections.forEach((section) => {
+    section.classList.toggle('is-active-section', section === activeSection);
+  });
 
   navLinks.forEach((link) => {
     link.toggleAttribute('aria-current', link === activeLink);

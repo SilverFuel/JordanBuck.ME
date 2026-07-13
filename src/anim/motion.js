@@ -234,7 +234,7 @@ function wireMagneticHover({ animate, utils, reduceMotion }) {
 function wireCardPhysics({ animate, spring, reduceMotion }) {
   const cardSpring = spring({ stiffness: 120, damping: 12 });
 
-  document.querySelectorAll('.work-card, .project-card').forEach((card) => {
+  document.querySelectorAll('.work-card').forEach((card) => {
     card.addEventListener('pointerenter', () => {
       if (reduceMotion.matches) {
         return;
