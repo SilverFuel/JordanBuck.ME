@@ -5,6 +5,9 @@ services:
     buildCommand: npm run build
     staticPublishPath: ./dist
     routes:
+      - type: redirect
+        source: /Jordan_Buck_One_Page_Enterprise_Technology_Resume.docx
+        destination: /jordan-buck-resume.pdf
       - type: rewrite
         source: /*
         destination: /index.html
