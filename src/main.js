@@ -84,7 +84,6 @@ const sectionIndexToggle = document.querySelector('[data-section-toggle]');
 const sectionJumpLinks = [...document.querySelectorAll('[data-section-jump]')];
 const sectionLabels = {
   hero: 'Intro',
-  impact: 'Scope',
   about: 'About',
   work: 'Work',
   projects: 'Projects',

@@ -15,10 +15,11 @@ const requiredMetricPatterns = [
   /data-operations-value>2,700<\/strong>/,
   /data-operations-mode="software">\s*<strong>2,700<\/strong><span>Software titles<\/span>/,
   /data-operations-mode="endpoints">\s*<strong>38,000\+<\/strong><span>Endpoints<\/span>/,
-  /<strong>2,700<\/strong>\s*<span>software titles supported<\/span>/,
-  /<strong>38,000\+<\/strong>\s*<span>Windows and Mac endpoints<\/span>/,
-  /<p>Move 38,000\+ Windows and Mac devices through the real Intune and Autopilot edge cases\.<\/p>/,
 ];
+const scaleMetricCounts = {
+  software: [...html.matchAll(/2,700/g)].length,
+  endpoints: [...html.matchAll(/38,000\+/g)].length,
+};
 const requiredHooks = [
   'data-section-index',
   'data-section-menu',
@@ -40,8 +41,8 @@ if (duplicateIds.length > 0) {
   process.exit(1);
 }
 
-if (sectionJumps !== 7) {
-  console.error(`Expected 7 section navigation links, found ${sectionJumps}.`);
+if (sectionJumps !== 6 || html.includes('id="impact"')) {
+  console.error(`Expected 6 section navigation links and no duplicate Impact section, found ${sectionJumps} links.`);
   process.exit(1);
 }
 
@@ -60,8 +61,14 @@ if (aboutBeats !== 3 || !html.includes('class="incident-callout')) {
   process.exit(1);
 }
 
-if (operationModes !== 3 || html.includes('2,700+') || requiredMetricPatterns.some((pattern) => !pattern.test(html))) {
-  console.error(`Expected 3 updated operational scope modes, found ${operationModes}.`);
+if (
+  operationModes !== 3
+  || html.includes('2,700+')
+  || scaleMetricCounts.software !== 2
+  || scaleMetricCounts.endpoints !== 1
+  || requiredMetricPatterns.some((pattern) => !pattern.test(html))
+) {
+  console.error(`Expected consolidated operational scope metrics, found ${operationModes} modes, ${scaleMetricCounts.software} software values, and ${scaleMetricCounts.endpoints} endpoint values.`);
   process.exit(1);
 }
 
