@@ -7,11 +7,15 @@ const missing = anchors.filter((anchor) => !ids.includes(anchor));
 const duplicateIds = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];
 const sectionJumps = [...html.matchAll(/\sdata-section-jump(?=[\s>])/g)].length;
 const projectPanels = [...html.matchAll(/\sdata-project-panel(?=[\s>])/g)].length;
+const ownershipPanels = [...html.matchAll(/\sdata-ownership-panel(?=[\s>])/g)].length;
+const aboutBeats = [...html.matchAll(/\sclass="[^"]*\babout-beat\b[^"]*"/g)].length;
 const requiredHooks = [
   'data-section-index',
   'data-section-menu',
   'data-section-toggle',
   'data-operations-console',
+  'data-ownership-path',
+  'data-ownership-tabs',
   'data-project-stage',
   'data-project-tabs',
 ];
@@ -36,6 +40,16 @@ if (projectPanels !== 5) {
   process.exit(1);
 }
 
+if (ownershipPanels !== 4) {
+  console.error(`Expected 4 ownership panels, found ${ownershipPanels}.`);
+  process.exit(1);
+}
+
+if (aboutBeats !== 3 || !html.includes('class="incident-callout')) {
+  console.error(`Expected 3 About beats and a Delivery Optimization incident callout, found ${aboutBeats} beats.`);
+  process.exit(1);
+}
+
 const missingHooks = requiredHooks.filter((hook) => !html.includes(hook));
 
 if (missingHooks.length > 0) {
@@ -43,4 +57,4 @@ if (missingHooks.length > 0) {
   process.exit(1);
 }
 
-console.log(`HTML checks passed for ${anchors.length} in-page links, ${sectionJumps} section links, and ${projectPanels} project panels.`);
+console.log(`HTML checks passed for ${anchors.length} in-page links, ${sectionJumps} section links, ${projectPanels} project panels, ${ownershipPanels} ownership panels, and ${aboutBeats} About beats.`);

@@ -258,6 +258,123 @@ function initOperationsConsole() {
   setMode('agencies');
 }
 
+function initOwnershipPath() {
+  const path = document.querySelector('[data-ownership-path]');
+
+  if (!path) {
+    return;
+  }
+
+  const tabsContainer = path.querySelector('[data-ownership-tabs]');
+  const stage = path.querySelector('[data-ownership-stage]');
+  const panels = [...path.querySelectorAll('[data-ownership-panel]')];
+  const compactLayout = window.matchMedia('(max-width: 719px)');
+
+  if (!tabsContainer || !stage || !panels.length) {
+    return;
+  }
+
+  let activeIndex = 0;
+  const titles = panels.map((panel, index) => panel.querySelector('h3')?.textContent?.trim() || `Area ${index + 1}`);
+  const tabButtons = panels.map((panel, index) => {
+    const button = document.createElement('button');
+    const number = document.createElement('span');
+    const title = document.createElement('strong');
+    const marker = document.createElement('i');
+
+    button.className = 'ownership-path__step';
+    button.type = 'button';
+    button.id = `ownership-tab-${index + 1}`;
+    button.setAttribute('role', 'tab');
+    button.setAttribute('aria-controls', panel.id);
+    number.textContent = String(index + 1).padStart(2, '0');
+    title.textContent = titles[index];
+    marker.setAttribute('aria-hidden', 'true');
+    button.append(number, title, marker);
+
+    panel.setAttribute('role', 'tabpanel');
+    panel.setAttribute('aria-labelledby', button.id);
+    panel.tabIndex = 0;
+
+    return button;
+  });
+
+  const showArea = (index, { focusTab = false } = {}) => {
+    const nextIndex = (index + panels.length) % panels.length;
+    const activeChanged = nextIndex !== activeIndex;
+
+    activeIndex = nextIndex;
+    path.dataset.ownershipIndex = String(activeIndex + 1).padStart(2, '0');
+
+    panels.forEach((panel, panelIndex) => {
+      panel.hidden = panelIndex !== activeIndex;
+    });
+    tabButtons.forEach((button, buttonIndex) => {
+      const isActive = buttonIndex === activeIndex;
+
+      button.setAttribute('aria-selected', String(isActive));
+      button.tabIndex = isActive ? 0 : -1;
+    });
+
+    if (focusTab) {
+      tabButtons[activeIndex]?.focus();
+    }
+
+    if (activeChanged && !reduceMotion.matches) {
+      const activePanel = panels[activeIndex];
+
+      animate(activePanel, {
+        opacity: [0.4, 1],
+        duration: 280,
+        ease: 'outQuad',
+        onComplete: () => activePanel.style.removeProperty('opacity'),
+      });
+    }
+  };
+
+  tabButtons.forEach((button, index) => {
+    button.addEventListener('click', () => showArea(index));
+  });
+  tabsContainer.replaceChildren(...tabButtons);
+
+  const updateOrientation = () => {
+    tabsContainer.setAttribute('aria-orientation', compactLayout.matches ? 'horizontal' : 'vertical');
+  };
+
+  updateOrientation();
+  compactLayout.addEventListener('change', updateOrientation);
+
+  tabsContainer.addEventListener('keydown', (event) => {
+    let nextIndex;
+
+    if (compactLayout.matches && event.key === 'ArrowLeft') {
+      nextIndex = activeIndex - 1;
+    } else if (compactLayout.matches && event.key === 'ArrowRight') {
+      nextIndex = activeIndex + 1;
+    } else if (compactLayout.matches && event.key === 'ArrowUp') {
+      nextIndex = activeIndex - 2;
+    } else if (compactLayout.matches && event.key === 'ArrowDown') {
+      nextIndex = activeIndex + 2;
+    } else if (!compactLayout.matches && event.key === 'ArrowUp') {
+      nextIndex = activeIndex - 1;
+    } else if (!compactLayout.matches && event.key === 'ArrowDown') {
+      nextIndex = activeIndex + 1;
+    } else if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = panels.length - 1;
+    } else {
+      return;
+    }
+
+    event.preventDefault();
+    showArea(nextIndex, { focusTab: true });
+  });
+
+  path.classList.add('is-enhanced');
+  showArea(0);
+}
+
 function initProjectStage() {
   const stage = document.querySelector('[data-project-stage]');
 
@@ -522,6 +639,7 @@ initAnimations({
 });
 
 initOperationsConsole();
+initOwnershipPath();
 initProjectStage();
 updateActiveNav();
 updateScrollProgress();

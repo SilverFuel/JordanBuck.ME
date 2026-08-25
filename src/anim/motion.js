@@ -203,7 +203,7 @@ function getGridRects(cells) {
 }
 
 function wireMagneticHover({ animate, utils, reduceMotion }) {
-  document.querySelectorAll('.magnetic:not(.work-card):not(.project-card)').forEach((target) => {
+  document.querySelectorAll('.magnetic:not(.project-card)').forEach((target) => {
     target.addEventListener('pointermove', (event) => {
       if (reduceMotion.matches) {
         return;
@@ -226,34 +226,6 @@ function wireMagneticHover({ animate, utils, reduceMotion }) {
         translateY: 0,
         duration: 420,
         ease: 'outExpo',
-      });
-    });
-  });
-}
-
-function wireCardPhysics({ animate, spring, reduceMotion }) {
-  const cardSpring = spring({ stiffness: 120, damping: 12 });
-
-  document.querySelectorAll('.work-card').forEach((card) => {
-    card.addEventListener('pointerenter', () => {
-      if (reduceMotion.matches) {
-        return;
-      }
-
-      animate(card, {
-        translateY: -8,
-        scale: 1.025,
-        duration: 280,
-        ease: cardSpring,
-      });
-    });
-
-    card.addEventListener('pointerleave', () => {
-      animate(card, {
-        translateY: 0,
-        scale: 1,
-        duration: 360,
-        ease: cardSpring,
       });
     });
   });
@@ -503,7 +475,6 @@ export function initAnimations(api) {
   runScrollDepth(api);
   runAmbientMotion(api);
   wireHeroGridReactivity(api);
-  wireCardPhysics(api);
   wireDraggableSignature(api);
   wireMagneticHover(api);
 

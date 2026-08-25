@@ -191,25 +191,44 @@
       </section>
 
       <section class="section section--about" id="about" aria-labelledby="about-title">
-        <div class="shell section-grid">
-          <div>
+        <div class="shell about-layout">
+          <div class="about-rail">
             <p class="eyebrow reveal-line">ABOUT</p>
             <h2 class="section-title glyph-title" id="about-title" data-split-text>What I do</h2>
+            <dl class="metric-strip about-focus">
+              <div class="metric-card reveal-card">
+                <dt>Known for</dt>
+                <dd>Sticking with the ugly problems until they are fixed, documented, and no longer waking somebody up.</dd>
+              </div>
+              <div class="metric-card reveal-card">
+                <dt>Current focus</dt>
+                <dd>Intune, Autopilot, better ServiceNow workflows, and practical AI that saves the team time.</dd>
+              </div>
+            </dl>
           </div>
-          <div class="section-copy">
-            <p class="lead reveal-line">I run Tier 3 for the Indiana Office of Technology. We take the escalations other teams cannot close, figure out what actually broke, and keep the same issue from coming back.</p>
-            <p class="lead reveal-line">A lot of the work right now is moving thousands of Windows and Mac devices from legacy, serial-based management to Intune and Autopilot. The slide deck version looks simple. The real work is in the edge cases.</p>
-            <p class="lead reveal-line">We saw that firsthand when a modern app rollout started swallowing network capacity. My team worked with networking and a Microsoft engineer, fixed the Delivery Optimization issue, and got the rollout back under control.</p>
-            <div class="metric-strip about-focus">
-              <div class="metric-card reveal-card">
-                <span>Known for</span>
-                <strong>Sticking with the ugly problems until they are fixed, documented, and no longer waking somebody up.</strong>
+          <div class="about-story">
+            <article class="about-beat reveal-line">
+              <p class="about-beat__label"><span>01</span>Resolve</p>
+              <p>Own the escalations other teams cannot close and figure out what actually broke.</p>
+            </article>
+            <article class="about-beat reveal-line">
+              <p class="about-beat__label"><span>02</span>Modernize</p>
+              <p>Move thousands of Windows and Mac devices through the real Intune and Autopilot edge cases.</p>
+            </article>
+            <article class="about-beat reveal-line">
+              <p class="about-beat__label"><span>03</span>Improve</p>
+              <p>Fix the underlying process so the same problem does not return.</p>
+            </article>
+            <aside class="incident-callout reveal-card" aria-label="Delivery Optimization incident">
+              <div class="incident-callout__label">
+                <span>Incident</span>
+                <strong>Delivery Optimization</strong>
               </div>
-              <div class="metric-card reveal-card">
-                <span>Current focus</span>
-                <strong>Intune, Autopilot, better ServiceNow workflows, and practical AI that saves the team time.</strong>
+              <div>
+                <p>A modern app rollout started swallowing network capacity.</p>
+                <p>My team worked with networking and a Microsoft engineer, fixed the Delivery Optimization issue, and got the rollout back under control.</p>
               </div>
-            </div>
+            </aside>
           </div>
         </div>
       </section>
@@ -220,27 +239,42 @@
             <p class="eyebrow reveal-line">THE WORK</p>
             <h2 class="section-title glyph-title" id="work-title" data-split-text>What I own</h2>
           </div>
-          <div class="card-grid" data-card-grid>
-            <article class="work-card reveal-card magnetic">
-              <span class="work-card__index" aria-hidden="true">01</span>
-              <h3>Running Tier 3</h3>
-              <p>I lead the team that gets the call after the usual fixes have failed. We solve the immediate problem, then make sure we do not keep solving it.</p>
-            </article>
-            <article class="work-card reveal-card magnetic">
-              <span class="work-card__index" aria-hidden="true">02</span>
-              <h3>Endpoint Modernization</h3>
-              <p>We are moving thousands of Windows and Mac devices from legacy management to Intune and Autopilot. It touches enrollment, apps, policy, support, and nearly every team around us.</p>
-            </article>
-            <article class="work-card reveal-card magnetic">
-              <span class="work-card__index" aria-hidden="true">03</span>
-              <h3>AI-Assisted Operations</h3>
-              <p>I use local models, Claude Code, and Codex for documentation, troubleshooting, and repeat work. The point is simple: give the team more time for problems that need a person.</p>
-            </article>
-            <article class="work-card reveal-card magnetic">
-              <span class="work-card__index" aria-hidden="true">04</span>
-              <h3>Project Delivery</h3>
-              <p>I turn broad requests into a plan with owners, decisions, status, and a finish line. Then I keep the work moving until it is actually done.</p>
-            </article>
+          <div class="ownership-path reveal-card" data-ownership-path>
+            <div class="ownership-path__steps" role="tablist" aria-label="Areas of ownership" data-ownership-tabs></div>
+            <div class="ownership-path__stage" data-ownership-stage>
+              <article class="ownership-path__panel" id="ownership-tier3" data-ownership-panel>
+                <span class="ownership-path__panel-index" aria-hidden="true">01</span>
+                <h3>Running Tier 3</h3>
+                <div class="ownership-path__outcome">
+                  <span>Outcome</span>
+                  <strong>We solve the immediate problem, then make sure we do not keep solving it.</strong>
+                </div>
+              </article>
+              <article class="ownership-path__panel" id="ownership-endpoints" data-ownership-panel>
+                <span class="ownership-path__panel-index" aria-hidden="true">02</span>
+                <h3>Endpoint modernization</h3>
+                <div class="ownership-path__outcome">
+                  <span>Scope</span>
+                  <strong>It touches enrollment, apps, policy, support, and nearly every team around us.</strong>
+                </div>
+              </article>
+              <article class="ownership-path__panel" id="ownership-ai" data-ownership-panel>
+                <span class="ownership-path__panel-index" aria-hidden="true">03</span>
+                <h3>AI-assisted operations</h3>
+                <div class="ownership-path__outcome">
+                  <span>Why it matters</span>
+                  <strong>The point is simple: give the team more time for problems that need a person.</strong>
+                </div>
+              </article>
+              <article class="ownership-path__panel" id="ownership-delivery" data-ownership-panel>
+                <span class="ownership-path__panel-index" aria-hidden="true">04</span>
+                <h3>Project delivery</h3>
+                <div class="ownership-path__outcome">
+                  <span>Finish line</span>
+                  <strong>Then I keep the work moving until it is actually done.</strong>
+                </div>
+              </article>
+            </div>
           </div>
         </div>
       </section>

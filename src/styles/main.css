@@ -665,16 +665,16 @@ button {
   position: relative;
   display: grid;
   width: 100%;
-  max-width: 440px;
+  max-width: 380px;
   min-width: 0;
   justify-self: end;
   gap: 0.65rem;
 }
 
 .headshot-frame {
-  width: min(100%, 360px);
+  width: 100%;
   min-width: 0;
-  justify-self: end;
+  justify-self: stretch;
   padding: 0.45rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -699,7 +699,7 @@ button {
   position: relative;
   z-index: 2;
   width: 100%;
-  margin-top: -4.4rem;
+  margin-top: -2.5rem;
   padding: 0.72rem;
   overflow: hidden;
   border: 1px solid var(--line);
@@ -923,6 +923,105 @@ button {
   align-items: start;
 }
 
+.about-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.76fr) minmax(0, 1.24fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+
+.about-rail,
+.about-story {
+  min-width: 0;
+}
+
+.about-rail .about-focus {
+  grid-template-columns: 1fr;
+  margin-top: 2.2rem;
+}
+
+.about-story {
+  border-top: 1px solid var(--line);
+}
+
+.about-beat {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+  padding: 1.05rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.about-beat p {
+  margin: 0;
+}
+
+.about-beat > p:last-child {
+  max-width: 60ch;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.55;
+}
+
+.about-beat__label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  color: var(--text);
+  font-family: ui-monospace, "SFMono-Regular", "Roboto Mono", Consolas, monospace;
+  font-size: 0.7rem;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+
+.about-beat__label span {
+  color: var(--accent);
+  font-size: 0.62rem;
+}
+
+.incident-callout {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(115, 167, 255, 0.24);
+  border-left: 2px solid var(--accent-3);
+  border-radius: var(--radius);
+  background: rgba(115, 167, 255, 0.055);
+}
+
+.incident-callout__label {
+  display: grid;
+  align-content: start;
+  gap: 0.42rem;
+}
+
+.incident-callout__label span {
+  color: var(--accent-3);
+  font-family: ui-monospace, "SFMono-Regular", "Roboto Mono", Consolas, monospace;
+  font-size: 0.64rem;
+  text-transform: uppercase;
+}
+
+.incident-callout__label strong {
+  font-size: 0.84rem;
+  line-height: 1.3;
+}
+
+.incident-callout p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.incident-callout p + p {
+  margin-top: 0.55rem;
+  color: var(--text);
+}
+
 .section-heading {
   max-width: 760px;
   margin-bottom: 1.35rem;
@@ -936,7 +1035,8 @@ button {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.75rem;
-  margin-top: 1.4rem;
+  padding: 0;
+  margin: 1.4rem 0 0;
 }
 
 .about-focus {
@@ -1003,7 +1103,6 @@ button {
 }
 
 .metric-card,
-.work-card,
 .project-card,
 .quote-card,
 .contact-link {
@@ -1018,6 +1117,7 @@ button {
 }
 
 .metric-card span,
+.metric-card dt,
 .contact-link span {
   display: block;
   color: var(--soft);
@@ -1027,20 +1127,21 @@ button {
   white-space: nowrap;
 }
 
-.metric-card strong {
+.metric-card strong,
+.metric-card dd {
   display: block;
   margin-top: 0.7rem;
   font-size: 0.9rem;
+  font-weight: 760;
   line-height: 1.38;
 }
 
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.9rem;
+.metric-card dd {
+  margin-right: 0;
+  margin-bottom: 0;
+  margin-left: 0;
 }
 
-.work-card,
 .project-card,
 .quote-card {
   position: relative;
@@ -1048,45 +1149,154 @@ button {
   overflow: hidden;
 }
 
-.work-card {
-  min-height: 178px;
-  transition: border-color 180ms ease, background 180ms ease;
+.ownership-path {
+  position: relative;
+  min-width: 0;
 }
 
-.work-card::after {
-  position: absolute;
-  inset: auto 1rem 1rem auto;
-  width: 52px;
-  height: 52px;
-  content: "";
-  border: 1px solid rgba(55, 255, 179, 0.22);
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(55, 255, 179, 0.2), transparent 62%);
+.ownership-path__steps:empty {
+  display: none;
 }
 
-.work-card:hover {
-  border-color: rgba(55, 255, 179, 0.46);
-  background: linear-gradient(180deg, rgba(55, 255, 179, 0.1), rgba(255, 255, 255, 0.03));
+.ownership-path__stage {
+  display: grid;
+  gap: 0.75rem;
 }
 
-.work-card__index {
+.ownership-path.is-enhanced {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.28fr);
+  gap: clamp(1.25rem, 3vw, 2.4rem);
+  align-items: stretch;
+}
+
+.ownership-path__steps {
+  position: relative;
+  display: grid;
+  align-content: start;
+  border-top: 1px solid var(--line);
+}
+
+.ownership-path__step {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  min-height: 68px;
+  grid-template-columns: 2.2rem minmax(0, 1fr) 10px;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.72rem 0.65rem;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--muted);
+  background: transparent;
+  appearance: none;
+  cursor: pointer;
+  text-align: left;
+  transition: color 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.ownership-path__step:hover,
+.ownership-path__step[aria-selected="true"] {
+  color: var(--text);
+  border-color: rgba(55, 255, 179, 0.38);
+  background: rgba(55, 255, 179, 0.075);
+}
+
+.ownership-path__step > span {
   color: var(--accent);
   font-family: ui-monospace, "SFMono-Regular", "Roboto Mono", Consolas, monospace;
-  font-size: 0.74rem;
+  font-size: 0.66rem;
 }
 
-.work-card h3 {
-  min-height: 2.5rem;
-  margin: 1.7rem 0 0.6rem;
-  font-size: 1.24rem;
-  line-height: 1.18;
+.ownership-path__step > strong {
+  min-width: 0;
+  font-size: 0.86rem;
+  line-height: 1.24;
 }
 
-.work-card p {
+.ownership-path__step > i {
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid currentColor;
+  border-right: 1px solid currentColor;
+  opacity: 0.45;
+  transform: rotate(45deg);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.ownership-path__step[aria-selected="true"] > i {
+  opacity: 1;
+  transform: translateX(2px) rotate(45deg);
+}
+
+.ownership-path__panel {
+  position: relative;
+  display: flex;
+  min-height: 274px;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(55, 255, 179, 0.08), transparent 52%),
+    rgba(255, 255, 255, 0.035);
+}
+
+.ownership-path__panel[hidden] {
+  display: none;
+}
+
+.ownership-path__panel-index {
+  position: absolute;
+  right: 0.8rem;
+  bottom: -0.8rem;
+  color: rgba(255, 255, 255, 0.035);
+  font-family: ui-monospace, "SFMono-Regular", "Roboto Mono", Consolas, monospace;
+  font-size: 7rem;
+  font-weight: 800;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.ownership-path__panel h3,
+.ownership-path__outcome {
+  position: relative;
+  z-index: 1;
+}
+
+.ownership-path__panel h3 {
+  max-width: 18ch;
   margin: 0;
-  color: var(--muted);
-  font-size: 0.94rem;
-  line-height: 1.48;
+  font-size: 2.15rem;
+  line-height: 1.08;
+}
+
+.ownership-path__outcome {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+  max-width: 650px;
+  margin-top: 1.35rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(55, 255, 179, 0.28);
+}
+
+.ownership-path__outcome span {
+  color: var(--accent);
+  font-family: ui-monospace, "SFMono-Regular", "Roboto Mono", Consolas, monospace;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+}
+
+.ownership-path__outcome strong {
+  max-width: 43ch;
+  font-size: 0.96rem;
+  line-height: 1.42;
 }
 
 .section--projects {
@@ -1747,6 +1957,7 @@ button {
 @media (max-width: 1020px) {
   .hero__inner,
   .section-grid,
+  .about-layout,
   .contact-panel,
   .impact-panel {
     grid-template-columns: 1fr;
@@ -1757,10 +1968,10 @@ button {
   }
 
   .hero__signal {
-    max-width: 100%;
-    grid-template-columns: minmax(240px, 0.58fr) minmax(0, 1fr);
-    align-items: end;
-    justify-self: stretch;
+    max-width: 380px;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    justify-self: center;
   }
 
   .headshot-frame {
@@ -1768,11 +1979,14 @@ button {
   }
 
   .operations-console {
-    margin-top: 0;
+    margin-top: -2.5rem;
+  }
+
+  .about-rail .about-focus {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .impact-list,
-  .card-grid,
   .quote-grid,
   .skill-board {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1883,23 +2097,65 @@ button {
   }
 
   .hero__signal {
+    width: 100%;
+    max-width: 380px;
     grid-template-columns: 1fr;
+    justify-self: center;
   }
 
   .headshot-frame {
-    width: min(82%, 320px);
-    justify-self: center;
+    width: 100%;
+    justify-self: stretch;
   }
 
   .operations-console {
     width: 100%;
+    margin-top: -2rem;
   }
 
   .impact-list,
-  .card-grid,
   .quote-grid,
   .skill-board {
     grid-template-columns: 1fr;
+  }
+
+  .about-rail .about-focus {
+    grid-template-columns: 1fr;
+  }
+
+  .about-beat {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .incident-callout {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .ownership-path.is-enhanced {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .ownership-path__steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 0;
+  }
+
+  .ownership-path__step {
+    min-height: 76px;
+    grid-template-columns: 1.8rem minmax(0, 1fr) 8px;
+    border-top: 1px solid var(--line);
+  }
+
+  .ownership-path__panel {
+    min-height: 250px;
+  }
+
+  .ownership-path__outcome {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
   }
 
   .project-stage.is-enhanced {
@@ -1933,10 +2189,6 @@ button {
 
   .project-card__media {
     aspect-ratio: 4 / 3;
-  }
-
-  .work-card {
-    min-height: 188px;
   }
 
   .about-focus {
