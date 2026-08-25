@@ -962,11 +962,22 @@ button {
   margin: 0;
 }
 
-.about-beat > p:last-child {
+.about-beat > p:last-child,
+.about-beat > div p {
   max-width: 60ch;
   color: var(--muted);
   font-size: 1.02rem;
   line-height: 1.55;
+}
+
+.about-beat > div {
+  min-width: 0;
+}
+
+.about-beat h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.02rem;
+  line-height: 1.3;
 }
 
 .about-beat__label {
@@ -1247,6 +1258,147 @@ button {
 
 .section--projects {
   background: rgba(255, 255, 255, 0.018);
+}
+
+.mission-case-study {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1.16fr) minmax(330px, 0.84fr);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(145deg, rgba(115, 167, 255, 0.08), transparent 54%),
+    rgba(255, 255, 255, 0.035);
+}
+
+.mission-case-study__media {
+  min-width: 0;
+  min-height: 410px;
+  overflow: hidden;
+  border-right: 1px solid var(--line);
+  background: #091225;
+}
+
+.mission-case-study__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mission-case-study__body {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(1.2rem, 3vw, 2rem);
+}
+
+.mission-case-study__body .project-card__eyebrow {
+  margin: 0 0 0.65rem;
+  color: var(--accent-3);
+  font-family: ui-monospace, "SFMono-Regular", "Roboto Mono", Consolas, monospace;
+  font-size: 0.66rem;
+  font-weight: 720;
+  text-transform: uppercase;
+}
+
+.mission-case-study__body h3 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1;
+}
+
+.mission-case-study__summary {
+  max-width: 38ch;
+  margin: 0.9rem 0 0;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+
+.mission-case-study__proof {
+  display: grid;
+  gap: 0;
+  margin: 1.35rem 0 0;
+  border-top: 1px solid rgba(115, 167, 255, 0.3);
+}
+
+.mission-case-study__proof div {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: 0.72rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.mission-case-study__proof dt {
+  color: var(--accent-3);
+  font-family: ui-monospace, "SFMono-Regular", "Roboto Mono", Consolas, monospace;
+  font-size: 0.64rem;
+  text-transform: uppercase;
+}
+
+.mission-case-study__proof dd {
+  margin: 0;
+  color: var(--soft);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.after-hours {
+  margin-top: clamp(2.4rem, 5vw, 4rem);
+}
+
+.after-hours__heading {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.3fr) minmax(220px, 0.7fr) minmax(260px, 1fr);
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1rem;
+}
+
+.after-hours__heading p,
+.after-hours__heading h3 {
+  margin: 0;
+}
+
+.after-hours__heading h3 {
+  font-size: 1.45rem;
+  line-height: 1.15;
+}
+
+.after-hours__heading > p:last-child {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.after-hours .project-stage.is-enhanced {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "tabs"
+    "viewport"
+    "controls";
+  gap: 0.75rem;
+}
+
+.after-hours .project-stage__tabs {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-flow: column;
+}
+
+.after-hours .project-card {
+  min-height: 250px;
+  grid-template-columns: minmax(300px, 0.75fr) minmax(0, 1.25fr);
+}
+
+.after-hours .project-card__media {
+  aspect-ratio: 16 / 9;
+}
+
+.ownership-incident {
+  margin-top: 1.25rem;
 }
 
 .quote-grid {
@@ -2200,8 +2352,31 @@ button {
     grid-template-columns: 1fr;
   }
 
+  .after-hours .project-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .project-card__media {
     aspect-ratio: 16 / 9;
+  }
+
+  .mission-case-study {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mission-case-study__media {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .after-hours__heading {
+    grid-template-columns: minmax(150px, 0.35fr) minmax(0, 0.65fr);
+  }
+
+  .after-hours__heading > p:last-child {
+    grid-column: 1 / -1;
   }
 }
 
@@ -2413,6 +2588,32 @@ button {
 
   .project-card__media {
     aspect-ratio: 4 / 3;
+  }
+
+  .mission-case-study__media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .mission-case-study__body {
+    padding: 1rem;
+  }
+
+  .mission-case-study__proof div {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .after-hours__heading {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+  }
+
+  .after-hours__heading > p:last-child {
+    grid-column: auto;
+  }
+
+  .after-hours .project-stage__tabs {
+    grid-template-columns: none;
   }
 
   .about-focus {

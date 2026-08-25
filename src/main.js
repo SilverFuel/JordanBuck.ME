@@ -84,10 +84,9 @@ const sectionIndexToggle = document.querySelector('[data-section-toggle]');
 const sectionJumpLinks = [...document.querySelectorAll('[data-section-jump]')];
 const sectionLabels = {
   hero: 'Intro',
-  about: 'About',
+  about: 'Leadership',
   work: 'Work',
   projects: 'Projects',
-  skills: 'Skills',
   contact: 'Contact',
 };
 
@@ -200,9 +199,9 @@ function initOperationsConsole() {
       isLit: () => true,
     },
     team: {
-      label: 'Technical leadership',
-      value: 'Tier 3',
-      detail: 'Engineers and Software Distribution',
+      label: 'People leadership',
+      value: '20',
+      detail: 'Across Tier 3 and Software Distribution',
       isLit: (index) => index >= 4 && index <= 23,
     },
   };
@@ -254,7 +253,7 @@ function initOperationsConsole() {
     consoleElement.style.setProperty('--ops-pointer-y', '42%');
   });
 
-  setMode('software');
+  setMode('team');
 }
 
 function initOwnershipPath() {

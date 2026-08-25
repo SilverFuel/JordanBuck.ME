@@ -12,9 +12,10 @@ const aboutBeats = [...html.matchAll(/\sclass="[^"]*\babout-beat\b[^"]*"/g)].len
 const operationModes = [...html.matchAll(/\sdata-operations-mode="[^"]+"/g)].length;
 const skillLanes = [...html.matchAll(/\sclass="[^"]*\bskill-lane\b[^"]*"/g)].length;
 const requiredMetricPatterns = [
-  /data-operations-value>2,700<\/strong>/,
+  /data-operations-value>20<\/strong>/,
   /data-operations-mode="software">\s*<strong>2,700<\/strong><span>Software titles<\/span>/,
   /data-operations-mode="endpoints">\s*<strong>38,000\+<\/strong><span>Endpoints<\/span>/,
+  /data-operations-mode="team">\s*<strong>20<\/strong><span>People<\/span>/,
 ];
 const scaleMetricCounts = {
   software: [...html.matchAll(/2,700/g)].length,
@@ -41,13 +42,13 @@ if (duplicateIds.length > 0) {
   process.exit(1);
 }
 
-if (sectionJumps !== 6 || html.includes('id="impact"')) {
-  console.error(`Expected 6 section navigation links and no duplicate Impact section, found ${sectionJumps} links.`);
+if (sectionJumps !== 5 || html.includes('id="impact"') || html.includes('id="skills"')) {
+  console.error(`Expected 5 section navigation links and no duplicate Impact or Skills section, found ${sectionJumps} links.`);
   process.exit(1);
 }
 
-if (projectPanels !== 5) {
-  console.error(`Expected 5 project panels, found ${projectPanels}.`);
+if (projectPanels !== 4 || !html.includes('class="mission-case-study')) {
+  console.error(`Expected a MissionBoard case study and 4 after-hours project panels, found ${projectPanels} panels.`);
   process.exit(1);
 }
 
@@ -64,7 +65,7 @@ if (aboutBeats !== 3 || !html.includes('class="incident-callout')) {
 if (
   operationModes !== 3
   || html.includes('2,700+')
-  || scaleMetricCounts.software !== 2
+  || scaleMetricCounts.software !== 1
   || scaleMetricCounts.endpoints !== 1
   || requiredMetricPatterns.some((pattern) => !pattern.test(html))
 ) {
@@ -72,8 +73,27 @@ if (
   process.exit(1);
 }
 
-if (skillLanes !== 4 || !html.includes('class="homeos-visual__health')) {
-  console.error(`Expected 4 capability lanes and the enhanced HomeOS visual, found ${skillLanes} lanes.`);
+if (skillLanes !== 0 || !html.includes('class="homeos-visual__health')) {
+  console.error(`Expected the redundant Skills section removed and the enhanced HomeOS visual retained, found ${skillLanes} skill lanes.`);
+  process.exit(1);
+}
+
+const positioningSignals = [
+  'ENTERPRISE TECHNOLOGY LEADERSHIP',
+  '5+ stores',
+  '300+ reviews',
+  'more than $3.5M in revenue',
+  '82.32% to 99.19%',
+  'jordan@jordanbuck.me',
+  'href="/jordan-buck-resume.pdf"',
+];
+
+if (
+  positioningSignals.some((signal) => !html.includes(signal))
+  || html.includes('spot bonuses')
+  || html.includes('Ollama and Local Models')
+) {
+  console.error('Executive positioning proof, domain email, or PDF resume link is missing or stale copy remains.');
   process.exit(1);
 }
 
@@ -84,4 +104,4 @@ if (missingHooks.length > 0) {
   process.exit(1);
 }
 
-console.log(`HTML checks passed for ${anchors.length} in-page links, ${sectionJumps} section links, ${projectPanels} project panels, ${ownershipPanels} ownership panels, ${aboutBeats} About beats, ${operationModes} scope modes, and ${skillLanes} capability lanes.`);
+console.log(`HTML checks passed for ${anchors.length} in-page links, ${sectionJumps} section links, 1 MissionBoard case study, ${projectPanels} after-hours project panels, ${ownershipPanels} ownership panels, ${aboutBeats} leadership beats, and ${operationModes} scope modes.`);

@@ -1,6 +1,6 @@
 # Jordan Buck
 
-Personal site for Jordan Buck, an enterprise IT leader focused on Tier 3 engineering, Software Distribution, endpoint modernization, ServiceNow process improvement, and practical AI adoption.
+Personal site for Jordan Buck, an enterprise technology leader with experience in business ownership, people leadership, technology strategy, statewide IT operations, and practical modernization.
 
 - [Site](https://jordanbuck.me/)
 - [LinkedIn](https://www.linkedin.com/in/jordan-buck-46102973/)
