@@ -81,7 +81,7 @@ function splitLabelText(node) {
 
 function showAllMotionTargets() {
   document
-    .querySelectorAll(`${sectionRevealSelector}, .grid-field`)
+    .querySelectorAll(`${sectionRevealSelector}, .grid-field, .hero__actions .button`)
     .forEach((target) => {
       Object.assign(target.style, visibleState);
     });
@@ -334,7 +334,7 @@ function wireDraggableSignature({ createDraggable, animate, spring, reduceMotion
   window.addEventListener('blur', resetToken);
 }
 
-function runIntro({ createTimeline, stagger }) {
+function runIntro({ animate, createTimeline, stagger }) {
   const timeline = createTimeline({
     defaults: {
       duration: 820,
@@ -342,7 +342,18 @@ function runIntro({ createTimeline, stagger }) {
     },
   });
   const cells = [...document.querySelectorAll('.grid-field span')];
+  const actionButtons = [...document.querySelectorAll('.hero__actions .button')];
   const { cols, rows } = getGridShape(cells);
+
+  animate(actionButtons, {
+    opacity: [0, 1],
+    translateY: [18, 0],
+    scale: [0.97, 1],
+    delay: stagger(85, { start: 520 }),
+    duration: 620,
+    ease: 'outExpo',
+    onComplete: () => forceTargetsVisible(actionButtons),
+  });
 
   timeline
     .add('.hero .glyph', {
@@ -361,7 +372,7 @@ function runIntro({ createTimeline, stagger }) {
       '-=720',
     )
     .add(
-      '.hero .reveal-line',
+      '.hero .reveal-line:not(.hero__actions)',
       {
         opacity: [0, 1],
         translateY: [28, 0],
@@ -378,6 +389,8 @@ function runIntro({ createTimeline, stagger }) {
       },
       '-=760',
     );
+
+  window.setTimeout(() => forceTargetsVisible(actionButtons), 2600);
 }
 
 function animateSection(section, { animate, onScroll, stagger }) {

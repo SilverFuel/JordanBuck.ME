@@ -188,22 +188,22 @@ function initOperationsConsole() {
   const value = consoleElement.querySelector('[data-operations-value]');
   const detail = consoleElement.querySelector('[data-operations-detail]');
   const modes = {
-    agencies: {
-      label: 'Agency coverage',
-      value: '70+',
-      detail: 'State agencies supported',
-      isLit: (index) => index % 2 === 0 || index === 9 || index === 21,
+    software: {
+      label: 'Software catalog',
+      value: '2,700',
+      detail: 'Software titles supported',
+      isLit: (index) => index % 3 !== 1 || index === 8 || index === 19,
     },
     endpoints: {
       label: 'Endpoint estate',
-      value: 'Thousands',
+      value: '38,000+',
       detail: 'Windows and Mac devices managed',
       isLit: () => true,
     },
     team: {
       label: 'Technical leadership',
-      value: '20',
-      detail: 'People on the technical team',
+      value: 'Tier 3',
+      detail: 'Engineers and Software Distribution',
       isLit: (index) => index >= 4 && index <= 23,
     },
   };
@@ -255,7 +255,7 @@ function initOperationsConsole() {
     consoleElement.style.setProperty('--ops-pointer-y', '42%');
   });
 
-  setMode('agencies');
+  setMode('software');
 }
 
 function initOwnershipPath() {

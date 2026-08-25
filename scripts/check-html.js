@@ -9,6 +9,16 @@ const sectionJumps = [...html.matchAll(/\sdata-section-jump(?=[\s>])/g)].length;
 const projectPanels = [...html.matchAll(/\sdata-project-panel(?=[\s>])/g)].length;
 const ownershipPanels = [...html.matchAll(/\sdata-ownership-panel(?=[\s>])/g)].length;
 const aboutBeats = [...html.matchAll(/\sclass="[^"]*\babout-beat\b[^"]*"/g)].length;
+const operationModes = [...html.matchAll(/\sdata-operations-mode="[^"]+"/g)].length;
+const skillLanes = [...html.matchAll(/\sclass="[^"]*\bskill-lane\b[^"]*"/g)].length;
+const requiredMetricPatterns = [
+  /data-operations-value>2,700<\/strong>/,
+  /data-operations-mode="software">\s*<strong>2,700<\/strong><span>Software titles<\/span>/,
+  /data-operations-mode="endpoints">\s*<strong>38,000\+<\/strong><span>Endpoints<\/span>/,
+  /<strong>2,700<\/strong>\s*<span>software titles supported<\/span>/,
+  /<strong>38,000\+<\/strong>\s*<span>Windows and Mac endpoints<\/span>/,
+  /<p>Move 38,000\+ Windows and Mac devices through the real Intune and Autopilot edge cases\.<\/p>/,
+];
 const requiredHooks = [
   'data-section-index',
   'data-section-menu',
@@ -50,6 +60,16 @@ if (aboutBeats !== 3 || !html.includes('class="incident-callout')) {
   process.exit(1);
 }
 
+if (operationModes !== 3 || html.includes('2,700+') || requiredMetricPatterns.some((pattern) => !pattern.test(html))) {
+  console.error(`Expected 3 updated operational scope modes, found ${operationModes}.`);
+  process.exit(1);
+}
+
+if (skillLanes !== 4 || !html.includes('class="homeos-visual__health')) {
+  console.error(`Expected 4 capability lanes and the enhanced HomeOS visual, found ${skillLanes} lanes.`);
+  process.exit(1);
+}
+
 const missingHooks = requiredHooks.filter((hook) => !html.includes(hook));
 
 if (missingHooks.length > 0) {
@@ -57,4 +77,4 @@ if (missingHooks.length > 0) {
   process.exit(1);
 }
 
-console.log(`HTML checks passed for ${anchors.length} in-page links, ${sectionJumps} section links, ${projectPanels} project panels, ${ownershipPanels} ownership panels, and ${aboutBeats} About beats.`);
+console.log(`HTML checks passed for ${anchors.length} in-page links, ${sectionJumps} section links, ${projectPanels} project panels, ${ownershipPanels} ownership panels, ${aboutBeats} About beats, ${operationModes} scope modes, and ${skillLanes} capability lanes.`);
