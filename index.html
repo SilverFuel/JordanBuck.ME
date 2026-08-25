@@ -50,14 +50,34 @@
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="scroll-progress" aria-hidden="true" data-scroll-progress></div>
-    <aside class="section-index" aria-label="Current section" data-section-index>
-      <span class="section-index__count">
-        <span data-section-current>01</span>
-        <span aria-hidden="true">/</span>
-        <span data-section-total>07</span>
-      </span>
-      <span class="section-index__label" data-section-label>Intro</span>
-    </aside>
+    <nav class="section-index" aria-label="Page sections" data-section-index>
+      <div class="section-index__menu" id="section-index-menu" aria-hidden="true" inert data-section-menu>
+        <a href="#hero" data-section-jump><span>01</span>Intro</a>
+        <a href="#impact" data-section-jump><span>02</span>Scope</a>
+        <a href="#about" data-section-jump><span>03</span>About</a>
+        <a href="#work" data-section-jump><span>04</span>Work</a>
+        <a href="#projects" data-section-jump><span>05</span>Projects</a>
+        <a href="#skills" data-section-jump><span>06</span>Skills</a>
+        <a href="#contact" data-section-jump><span>07</span>Contact</a>
+      </div>
+      <button
+        class="section-index__trigger"
+        type="button"
+        aria-label="Open section navigator"
+        title="Page sections"
+        aria-expanded="false"
+        aria-controls="section-index-menu"
+        data-section-toggle
+      >
+        <span class="section-index__count">
+          <span data-section-current>01</span>
+          <span aria-hidden="true">/</span>
+          <span data-section-total>07</span>
+        </span>
+        <span class="section-index__label" data-section-label>Intro</span>
+        <span class="section-index__chevron" aria-hidden="true"></span>
+      </button>
+    </nav>
 
     <header class="site-header" data-header>
       <nav class="nav shell" aria-label="Primary navigation">
@@ -107,7 +127,7 @@
               <a class="button button--quiet magnetic" href="#projects">View projects</a>
             </div>
           </div>
-          <aside class="hero__signal" aria-label="Profile snapshot">
+          <aside class="hero__signal" aria-label="Profile and operational scope">
             <div class="headshot-frame">
               <img
                 class="headshot-image"
@@ -118,13 +138,30 @@
                 loading="lazy"
               >
             </div>
-            <div class="signal-card">
-              <p class="signal-card__label">Status</p>
-              <p>Open to the right technology leadership role.</p>
-            </div>
-            <div class="signal-card signal-card--tools">
-              <p class="signal-card__label">Tools</p>
-              <p>Intune, Autopilot, ServiceNow, Claude Code, Codex, Ollama, and CodeRabbit.</p>
+            <div class="operations-console" data-operations-console data-scope="agencies">
+              <div class="operations-console__header">
+                <span>Operations field</span>
+                <span class="operations-console__status"><i aria-hidden="true"></i>Tier 3 active</span>
+              </div>
+              <div class="operations-console__display">
+                <div class="operations-field" aria-hidden="true" data-operations-field></div>
+                <div class="operations-readout" aria-live="polite">
+                  <span data-operations-label>Agency coverage</span>
+                  <strong data-operations-value>70+</strong>
+                  <small data-operations-detail>State agencies supported</small>
+                </div>
+              </div>
+              <div class="operations-console__modes" role="group" aria-label="Explore operational scope">
+                <button type="button" aria-pressed="true" data-operations-mode="agencies">
+                  <strong>70+</strong><span>Agencies</span>
+                </button>
+                <button type="button" aria-pressed="false" data-operations-mode="endpoints">
+                  <strong>Thousands</strong><span>Endpoints</span>
+                </button>
+                <button type="button" aria-pressed="false" data-operations-mode="team">
+                  <strong>20</strong><span>Team</span>
+                </button>
+              </div>
             </div>
           </aside>
         </div>
@@ -215,18 +252,11 @@
             <h2 class="section-title glyph-title" id="projects-title" data-split-text>Stuff I've built</h2>
             <p class="lead reveal-line">Most of these started because I needed something and could not find a version I liked. I build them after work, use them myself, and keep improving them.</p>
           </div>
-          <div
-            class="project-carousel"
-            role="region"
-            aria-roledescription="carousel"
-            aria-label="Selected projects"
-            aria-describedby="project-carousel-instructions"
-            data-project-carousel
-          >
-            <p class="visually-hidden" id="project-carousel-instructions">Use the previous and next buttons or the left and right arrow keys to browse projects.</p>
-            <div class="project-carousel__viewport" tabindex="0" data-project-viewport>
-              <div class="project-grid" data-card-grid data-project-track>
-                <article class="project-card reveal-card magnetic" data-project-slide>
+          <div class="project-stage reveal-card" role="region" aria-label="Selected projects" data-project-stage>
+            <div class="project-stage__tabs" role="tablist" aria-label="Projects" data-project-tabs></div>
+            <div class="project-stage__viewport" tabindex="0" data-project-viewport>
+              <div class="project-stage__panels" data-project-panels>
+                <article class="project-card" id="project-homeos" data-project-panel>
                   <div class="project-card__media project-card__media--homeos" role="img" aria-label="HomeOS family wall dashboard showing weather, camera, and scene controls">
                     <div class="homeos-visual" aria-hidden="true">
                       <div class="homeos-visual__topline">
@@ -250,36 +280,48 @@
                       </div>
                     </div>
                   </div>
-                  <h3>HomeOS</h3>
-                  <p>I wanted a wall dashboard without another subscription, so I built one. It runs on a Raspberry Pi and handles Home Assistant scenes, camera feeds, and a focus mode. I use it every day.</p>
-                  <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
+                  <div class="project-card__body">
+                    <p class="project-card__eyebrow">Home / Automation</p>
+                    <h3>HomeOS</h3>
+                    <p>I wanted a wall dashboard without another subscription, so I built one. It runs on a Raspberry Pi and handles Home Assistant scenes, camera feeds, and a focus mode. I use it every day.</p>
+                    <ul class="project-card__meta" aria-label="HomeOS details"><li>Raspberry Pi</li><li>Home Assistant</li><li>Daily use</li></ul>
+                  </div>
                 </article>
-                <article class="project-card reveal-card magnetic" data-project-slide>
+                <article class="project-card" id="project-missionboard" data-project-panel>
                   <div class="project-card__media project-card__media--image">
                     <img src="/projects/missionboard.png" alt="MissionBoard portfolio overview dashboard" loading="lazy" decoding="async">
                   </div>
-                  <h3>MissionBoard</h3>
-                  <p>I built MissionBoard to track projects, escalations, owners, and status in one place. It comes directly from running a Tier 3 operation.</p>
-                  <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
+                  <div class="project-card__body">
+                    <p class="project-card__eyebrow">IT / Operations</p>
+                    <h3>MissionBoard</h3>
+                    <p>I built MissionBoard to track projects, escalations, owners, and status in one place. It comes directly from running a Tier 3 operation.</p>
+                    <ul class="project-card__meta" aria-label="MissionBoard details"><li>Operations</li><li>Workflow</li><li>In development</li></ul>
+                  </div>
                 </article>
-                <article class="project-card reveal-card magnetic" data-project-slide>
+                <article class="project-card" id="project-printdeck" data-project-panel>
                   <div class="project-card__media project-card__media--image">
                     <img src="/projects/printdeck.png" alt="PrintDeck 3D printer and AI-assisted model catalog" loading="lazy" decoding="async">
                   </div>
-                  <h3>PrintDeck</h3>
-                  <p>An STL library and filament tracker for my Bambu printers, with AI vision to tag models so I stop losing them.</p>
-                  <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
+                  <div class="project-card__body">
+                    <p class="project-card__eyebrow">Making / Catalog</p>
+                    <h3>PrintDeck</h3>
+                    <p>An STL library and filament tracker for my Bambu printers, with AI vision to tag models so I stop losing them.</p>
+                    <ul class="project-card__meta" aria-label="PrintDeck details"><li>3D printing</li><li>AI vision</li><li>Personal tool</li></ul>
+                  </div>
                 </article>
-                <article class="project-card reveal-card magnetic" data-project-slide>
+                <article class="project-card" id="project-bench-path" data-project-panel>
                   <div class="project-card__media project-card__media--bench-path">
                     <img src="/projects/bench-path-studios.png" alt="Bench Path Studios CNC router cutting a toolpath into a wooden workpiece" loading="lazy" decoding="async">
                     <span class="bench-path-visual__label" aria-hidden="true">CNC DESIGN / CAM / GRBL</span>
                   </div>
-                  <h3>Bench Path Studios</h3>
-                  <p>A Windows CNC design and CAM app that works offline with GRBL machines. It keeps design, toolpaths, and machine setup on the same computer.</p>
-                  <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
+                  <div class="project-card__body">
+                    <p class="project-card__eyebrow">CNC / Desktop</p>
+                    <h3>Bench Path Studios</h3>
+                    <p>A Windows CNC design and CAM app that works offline with GRBL machines. It keeps design, toolpaths, and machine setup on the same computer.</p>
+                    <ul class="project-card__meta" aria-label="Bench Path Studios details"><li>Windows</li><li>CNC + CAM</li><li>Offline-first</li></ul>
+                  </div>
                 </article>
-                <article class="project-card reveal-card magnetic" data-project-slide>
+                <article class="project-card" id="project-offgridiq" data-project-panel>
                   <div class="project-card__media project-card__media--offgrid" role="img" aria-label="OffGridIQ air-quality monitor concept showing AQI, carbon dioxide, temperature, and humidity readings">
                     <div class="offgrid-visual" aria-hidden="true">
                       <div class="offgrid-device">
@@ -297,22 +339,25 @@
                       <div class="offgrid-visual__signal"><i></i><i></i><i></i></div>
                     </div>
                   </div>
-                  <h3>OffGridIQ</h3>
-                  <p>A small, 3D-printable desk monitor for air quality, temperature, and humidity. I am building the hardware, enclosure, and software together.</p>
-                  <a class="project-card__link" href="#" hidden data-project-link>Project link slot</a>
+                  <div class="project-card__body">
+                    <p class="project-card__eyebrow">Hardware / Environment</p>
+                    <h3>OffGridIQ</h3>
+                    <p>A small, 3D-printable desk monitor for air quality, temperature, and humidity. I am building the hardware, enclosure, and software together.</p>
+                    <ul class="project-card__meta" aria-label="OffGridIQ details"><li>Hardware</li><li>Air quality</li><li>Prototype</li></ul>
+                  </div>
                 </article>
               </div>
             </div>
-            <div class="project-carousel__controls">
-              <p class="project-carousel__status" aria-live="polite">
+            <div class="project-stage__controls">
+              <p class="project-stage__status" aria-live="polite">
                 <span data-project-current>01</span>
                 <span aria-hidden="true">/</span>
                 <span data-project-total>05</span>
+                <span class="visually-hidden" data-project-name-status>HomeOS</span>
               </p>
-              <div class="project-carousel__scrubber" role="group" aria-label="Choose a project" data-project-pagination></div>
-              <div class="project-carousel__buttons">
-                <button class="project-carousel__button magnetic" type="button" aria-label="Previous project" title="Previous project" data-project-prev>&larr;</button>
-                <button class="project-carousel__button magnetic" type="button" aria-label="Next project" title="Next project" data-project-next>&rarr;</button>
+              <div class="project-stage__buttons">
+                <button class="project-stage__button magnetic" type="button" aria-label="Previous project" title="Previous project" data-project-prev>&larr;</button>
+                <button class="project-stage__button magnetic" type="button" aria-label="Next project" title="Next project" data-project-next>&rarr;</button>
               </div>
             </div>
           </div>

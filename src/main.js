@@ -78,11 +78,15 @@ const copyStatus = document.querySelector('[data-copy-status]');
 const sectionIndexCurrent = document.querySelector('[data-section-current]');
 const sectionIndexTotal = document.querySelector('[data-section-total]');
 const sectionIndexLabel = document.querySelector('[data-section-label]');
+const sectionIndex = document.querySelector('[data-section-index]');
+const sectionIndexMenu = document.querySelector('[data-section-menu]');
+const sectionIndexToggle = document.querySelector('[data-section-toggle]');
+const sectionJumpLinks = [...document.querySelectorAll('[data-section-jump]')];
 const sectionLabels = {
   hero: 'Intro',
   impact: 'Scope',
   about: 'About',
-  work: 'Impact',
+  work: 'Work',
   projects: 'Projects',
   skills: 'Skills',
   contact: 'Contact',
@@ -102,13 +106,46 @@ function setNavOpen(isOpen) {
   document.body.classList.toggle('nav-open', isOpen);
 }
 
+function setSectionIndexOpen(isOpen) {
+  sectionIndex?.classList.toggle('is-open', isOpen);
+  if (sectionIndexMenu) {
+    sectionIndexMenu.toggleAttribute('inert', !isOpen);
+    sectionIndexMenu.setAttribute('aria-hidden', String(!isOpen));
+  }
+  sectionIndexToggle?.setAttribute('aria-expanded', String(isOpen));
+  sectionIndexToggle?.setAttribute('aria-label', isOpen ? 'Close section navigator' : 'Open section navigator');
+}
+
 navToggle?.addEventListener('click', () => {
   const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+  setSectionIndexOpen(false);
   setNavOpen(!isOpen);
 });
 
 navLinks.forEach((link) => {
   link.addEventListener('click', () => setNavOpen(false));
+});
+
+sectionIndexToggle?.addEventListener('click', () => {
+  setNavOpen(false);
+  setSectionIndexOpen(sectionIndexToggle.getAttribute('aria-expanded') !== 'true');
+});
+
+sectionJumpLinks.forEach((link) => {
+  link.addEventListener('click', () => setSectionIndexOpen(false));
+});
+
+document.addEventListener('pointerdown', (event) => {
+  if (sectionIndex?.classList.contains('is-open') && !sectionIndex.contains(event.target)) {
+    setSectionIndexOpen(false);
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && sectionIndex?.classList.contains('is-open')) {
+    setSectionIndexOpen(false);
+    sectionIndexToggle?.focus();
+  }
 });
 
 copyEmailButton?.addEventListener('click', async () => {
@@ -138,221 +175,250 @@ copyEmailButton?.addEventListener('click', async () => {
   }, 2200);
 });
 
-function initProjectCarousel() {
-  const carousel = document.querySelector('[data-project-carousel]');
+function initOperationsConsole() {
+  const consoleElement = document.querySelector('[data-operations-console]');
 
-  if (!carousel) {
+  if (!consoleElement) {
     return;
   }
 
-  const viewport = carousel.querySelector('[data-project-viewport]');
-  const track = carousel.querySelector('[data-project-track]');
-  const slides = [...carousel.querySelectorAll('[data-project-slide]')];
-  const previousButton = carousel.querySelector('[data-project-prev]');
-  const nextButton = carousel.querySelector('[data-project-next]');
-  const currentLabel = carousel.querySelector('[data-project-current]');
-  const totalLabel = carousel.querySelector('[data-project-total]');
-  const pagination = carousel.querySelector('[data-project-pagination]');
+  const field = consoleElement.querySelector('[data-operations-field]');
+  const modeButtons = [...consoleElement.querySelectorAll('[data-operations-mode]')];
+  const label = consoleElement.querySelector('[data-operations-label]');
+  const value = consoleElement.querySelector('[data-operations-value]');
+  const detail = consoleElement.querySelector('[data-operations-detail]');
+  const modes = {
+    agencies: {
+      label: 'Agency coverage',
+      value: '70+',
+      detail: 'State agencies supported',
+      isLit: (index) => index % 2 === 0 || index === 9 || index === 21,
+    },
+    endpoints: {
+      label: 'Endpoint estate',
+      value: 'Thousands',
+      detail: 'Windows and Mac devices managed',
+      isLit: () => true,
+    },
+    team: {
+      label: 'Technical leadership',
+      value: '20',
+      detail: 'People on the technical team',
+      isLit: (index) => index >= 4 && index <= 23,
+    },
+  };
+  const nodes = Array.from({ length: 28 }, (_, index) => {
+    const node = document.createElement('span');
 
-  if (!viewport || !track || !slides.length) {
+    node.style.setProperty('--node-delay', `${(index % 7) * 90}ms`);
+    return node;
+  });
+
+  field?.replaceChildren(...nodes);
+
+  const setMode = (modeName) => {
+    const mode = modes[modeName];
+
+    if (!mode) {
+      return;
+    }
+
+    consoleElement.dataset.scope = modeName;
+    if (label) label.textContent = mode.label;
+    if (value) value.textContent = mode.value;
+    if (detail) detail.textContent = mode.detail;
+
+    modeButtons.forEach((button) => {
+      button.setAttribute('aria-pressed', String(button.dataset.operationsMode === modeName));
+    });
+    nodes.forEach((node, index) => {
+      node.classList.toggle('is-lit', mode.isLit(index));
+      node.classList.toggle('is-core', modeName === 'team' && index >= 10 && index <= 17);
+    });
+  };
+
+  modeButtons.forEach((button) => {
+    button.addEventListener('click', () => setMode(button.dataset.operationsMode));
+  });
+
+  consoleElement.addEventListener('pointermove', (event) => {
+    if (reduceMotion.matches) {
+      return;
+    }
+
+    const rect = consoleElement.getBoundingClientRect();
+    consoleElement.style.setProperty('--ops-pointer-x', `${((event.clientX - rect.left) / rect.width) * 100}%`);
+    consoleElement.style.setProperty('--ops-pointer-y', `${((event.clientY - rect.top) / rect.height) * 100}%`);
+  });
+  consoleElement.addEventListener('pointerleave', () => {
+    consoleElement.style.setProperty('--ops-pointer-x', '50%');
+    consoleElement.style.setProperty('--ops-pointer-y', '42%');
+  });
+
+  setMode('agencies');
+}
+
+function initProjectStage() {
+  const stage = document.querySelector('[data-project-stage]');
+
+  if (!stage) {
+    return;
+  }
+
+  const viewport = stage.querySelector('[data-project-viewport]');
+  const tabsContainer = stage.querySelector('[data-project-tabs]');
+  const panels = [...stage.querySelectorAll('[data-project-panel]')];
+  const previousButton = stage.querySelector('[data-project-prev]');
+  const nextButton = stage.querySelector('[data-project-next]');
+  const currentLabel = stage.querySelector('[data-project-current]');
+  const totalLabel = stage.querySelector('[data-project-total]');
+  const nameStatus = stage.querySelector('[data-project-name-status]');
+
+  if (!viewport || !tabsContainer || !panels.length) {
     return;
   }
 
   let activeIndex = 0;
-  let updateFrame = 0;
-  let dragPointerId = null;
-  let dragStartX = 0;
-  let dragStartScroll = 0;
-  let dragMoved = false;
-  let navigationTimer = 0;
-  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-  const paginationButtons = slides.map((slide, index) => {
+  let swipePointerId = null;
+  let swipeStartX = 0;
+  const projectNames = panels.map((panel, index) => panel.querySelector('h3')?.textContent?.trim() || `Project ${index + 1}`);
+  const tabButtons = panels.map((panel, index) => {
     const button = document.createElement('button');
-    const projectName = slide.querySelector('h3')?.textContent?.trim() || `project ${index + 1}`;
+    const number = document.createElement('span');
+    const name = document.createElement('strong');
 
-    button.className = 'project-carousel__scrubber-button';
+    button.className = 'project-stage__tab';
     button.type = 'button';
-    button.setAttribute('aria-label', `Show ${projectName}`);
-    button.title = projectName;
-    button.addEventListener('click', () => goTo(index));
+    button.id = `project-tab-${index + 1}`;
+    button.setAttribute('role', 'tab');
+    button.setAttribute('aria-controls', panel.id);
+    number.textContent = String(index + 1).padStart(2, '0');
+    name.textContent = projectNames[index];
+    button.append(number, name);
+
+    panel.setAttribute('role', 'tabpanel');
+    panel.setAttribute('aria-labelledby', button.id);
 
     return button;
   });
 
-  pagination?.replaceChildren(...paginationButtons);
+  const showProject = (index, { focusTab = false } = {}) => {
+    const nextIndex = Math.min(Math.max(index, 0), panels.length - 1);
+    const activeChanged = nextIndex !== activeIndex;
 
-  const slideOffset = (slide) => slide.offsetLeft - track.offsetLeft;
-  const findNearestIndex = () => {
-    return slides.reduce((nearest, slide, index) => {
-      const currentDistance = Math.abs(slideOffset(slide) - viewport.scrollLeft);
-      const nearestDistance = Math.abs(slideOffset(slides[nearest]) - viewport.scrollLeft);
-
-      return currentDistance < nearestDistance ? index : nearest;
-    }, 0);
-  };
-
-  const renderState = () => {
-    updateFrame = 0;
-    const nextActiveIndex = findNearestIndex();
-    const activeChanged = nextActiveIndex !== activeIndex;
-
-    activeIndex = nextActiveIndex;
+    activeIndex = nextIndex;
 
     if (currentLabel) {
       currentLabel.textContent = String(activeIndex + 1).padStart(2, '0');
-
-      if (activeChanged && !reduceMotion.matches) {
-        animate(currentLabel, {
-          opacity: [0.25, 1],
-          translateY: [7, 0],
-          duration: 360,
-          ease: 'outExpo',
-        });
-      }
     }
     if (totalLabel) {
-      totalLabel.textContent = String(slides.length).padStart(2, '0');
+      totalLabel.textContent = String(panels.length).padStart(2, '0');
+    }
+    if (nameStatus) {
+      nameStatus.textContent = projectNames[activeIndex];
     }
 
-    slides.forEach((slide, index) => {
-      if (index === activeIndex) {
-        slide.setAttribute('aria-current', 'true');
-      } else {
-        slide.removeAttribute('aria-current');
-      }
-      slide.dataset.projectIndex = String(index + 1).padStart(2, '0');
+    panels.forEach((panel, panelIndex) => {
+      panel.hidden = panelIndex !== activeIndex;
+      panel.dataset.projectIndex = String(panelIndex + 1).padStart(2, '0');
     });
+    tabButtons.forEach((button, buttonIndex) => {
+      const isActive = buttonIndex === activeIndex;
 
-    paginationButtons.forEach((button, index) => {
-      if (index === activeIndex) {
-        button.setAttribute('aria-current', 'true');
-      } else {
-        button.removeAttribute('aria-current');
-      }
+      button.setAttribute('aria-selected', String(isActive));
+      button.tabIndex = isActive ? 0 : -1;
     });
 
     if (previousButton) {
       previousButton.disabled = activeIndex === 0;
     }
     if (nextButton) {
-      nextButton.disabled = activeIndex === slides.length - 1;
+      nextButton.disabled = activeIndex === panels.length - 1;
+    }
+    if (focusTab) {
+      tabButtons[activeIndex]?.focus();
+    }
+
+    if (activeChanged && !reduceMotion.matches) {
+      const activePanel = panels[activeIndex];
+
+      animate(activePanel, {
+        opacity: [0.45, 1],
+        duration: 320,
+        ease: 'outQuad',
+        onComplete: () => activePanel.style.removeProperty('opacity'),
+      });
     }
   };
 
-  const queueStateUpdate = () => {
-    if (!updateFrame) {
-      updateFrame = requestAnimationFrame(renderState);
+  tabButtons.forEach((button, index) => {
+    button.addEventListener('click', () => showProject(index));
+  });
+  tabsContainer.replaceChildren(...tabButtons);
+
+  tabsContainer.addEventListener('keydown', (event) => {
+    let nextIndex;
+
+    if (event.key === 'ArrowLeft') {
+      nextIndex = (activeIndex - 1 + panels.length) % panels.length;
+    } else if (event.key === 'ArrowRight') {
+      nextIndex = (activeIndex + 1) % panels.length;
+    } else if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = panels.length - 1;
+    } else {
+      return;
     }
-  };
 
-  const goTo = (index) => {
-    const nextIndex = Math.min(Math.max(index, 0), slides.length - 1);
+    event.preventDefault();
+    showProject(nextIndex, { focusTab: true });
+  });
 
-    carousel.classList.add('is-navigating');
-    window.clearTimeout(navigationTimer);
-    navigationTimer = window.setTimeout(() => carousel.classList.remove('is-navigating'), 800);
-
-    viewport.scrollTo({
-      left: slideOffset(slides[nextIndex]),
-      behavior: reduceMotion.matches ? 'auto' : 'smooth',
-    });
-  };
-
-  previousButton?.addEventListener('click', () => goTo(activeIndex - 1));
-  nextButton?.addEventListener('click', () => goTo(activeIndex + 1));
+  previousButton?.addEventListener('click', () => showProject(activeIndex - 1));
+  nextButton?.addEventListener('click', () => showProject(activeIndex + 1));
 
   viewport.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowLeft') {
       event.preventDefault();
-      goTo(activeIndex - 1);
+      showProject(activeIndex - 1);
     }
     if (event.key === 'ArrowRight') {
       event.preventDefault();
-      goTo(activeIndex + 1);
+      showProject(activeIndex + 1);
     }
   });
 
-  viewport.addEventListener('scroll', queueStateUpdate, { passive: true });
-  viewport.addEventListener('scrollend', () => {
-    window.clearTimeout(navigationTimer);
-    carousel.classList.remove('is-navigating');
-    renderState();
-  });
   viewport.addEventListener('dragstart', (event) => event.preventDefault());
-
-  slides.forEach((slide) => {
-    const resetHighlight = () => {
-      slide.style.setProperty('--pointer-x', '50%');
-    };
-
-    slide.addEventListener('pointermove', (event) => {
-      if (reduceMotion.matches || !finePointer.matches) {
-        return;
-      }
-
-      const rect = slide.getBoundingClientRect();
-      const normalizedX = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
-
-      slide.style.setProperty('--pointer-x', `${((normalizedX + 1) / 2) * 100}%`);
-    });
-
-    slide.addEventListener('pointerleave', resetHighlight);
-    resetHighlight();
-  });
-
   viewport.addEventListener('pointerdown', (event) => {
-    if (event.pointerType !== 'mouse' || event.button !== 0) {
+    if (event.pointerType === 'mouse') {
       return;
     }
 
-    dragPointerId = event.pointerId;
-    dragStartX = event.clientX;
-    dragStartScroll = viewport.scrollLeft;
-    dragMoved = false;
-    viewport.classList.add('is-dragging');
-    viewport.setPointerCapture(event.pointerId);
+    swipePointerId = event.pointerId;
+    swipeStartX = event.clientX;
   });
 
-  viewport.addEventListener('pointermove', (event) => {
-    if (event.pointerId !== dragPointerId) {
+  const finishSwipe = (event) => {
+    if (event.pointerId !== swipePointerId) {
       return;
     }
 
-    const delta = event.clientX - dragStartX;
-    dragMoved ||= Math.abs(delta) > 4;
-    viewport.scrollLeft = dragStartScroll - delta;
+    const distance = event.clientX - swipeStartX;
+    swipePointerId = null;
 
-    if (dragMoved) {
-      event.preventDefault();
-    }
-  });
-
-  const releaseDrag = (event) => {
-    if (event.pointerId !== dragPointerId) {
-      return;
-    }
-
-    if (viewport.hasPointerCapture?.(event.pointerId)) {
-      viewport.releasePointerCapture(event.pointerId);
-    }
-    viewport.classList.remove('is-dragging');
-    dragPointerId = null;
-
-    if (dragMoved) {
-      goTo(findNearestIndex());
+    if (Math.abs(distance) >= 48) {
+      showProject(activeIndex + (distance < 0 ? 1 : -1));
     }
   };
 
-  viewport.addEventListener('pointerup', releaseDrag);
-  viewport.addEventListener('pointercancel', releaseDrag);
-
-  const carouselResizeObserver = new ResizeObserver(() => {
-    goTo(activeIndex);
-    queueStateUpdate();
+  viewport.addEventListener('pointerup', finishSwipe);
+  viewport.addEventListener('pointercancel', () => {
+    swipePointerId = null;
   });
-  carouselResizeObserver.observe(viewport);
 
-  renderState();
+  stage.classList.add('is-enhanced');
+  showProject(0);
 }
 
 function moveIndicator(link) {
@@ -379,6 +445,7 @@ function updateActiveNav() {
         return section.getBoundingClientRect().top <= activationLine ? section : current;
       }, sections[0]);
   const activeLink = navLinks.find((link) => link.hash === `#${activeSection.id}`);
+  const activeSectionJump = sectionJumpLinks.find((link) => link.hash === `#${activeSection.id}`);
 
   sections.forEach((section) => {
     section.classList.toggle('is-active-section', section === activeSection);
@@ -387,14 +454,25 @@ function updateActiveNav() {
   navLinks.forEach((link) => {
     link.toggleAttribute('aria-current', link === activeLink);
   });
+  sectionJumpLinks.forEach((link) => {
+    if (link === activeSectionJump) {
+      link.setAttribute('aria-current', 'location');
+    } else {
+      link.removeAttribute('aria-current');
+    }
+  });
   moveIndicator(activeLink);
 
-  const sectionIndex = sections.indexOf(activeSection);
+  const sectionPosition = sections.indexOf(activeSection);
+  const activeSectionLabel = sectionLabels[activeSection.id] ?? activeSection.id;
   if (sectionIndexCurrent) {
-    sectionIndexCurrent.textContent = String(sectionIndex + 1).padStart(2, '0');
+    sectionIndexCurrent.textContent = String(sectionPosition + 1).padStart(2, '0');
   }
   if (sectionIndexLabel) {
-    sectionIndexLabel.textContent = sectionLabels[activeSection.id] ?? activeSection.id;
+    sectionIndexLabel.textContent = activeSectionLabel;
+  }
+  if (sectionIndexToggle?.getAttribute('aria-expanded') !== 'true') {
+    sectionIndexToggle?.setAttribute('aria-label', `Open section navigator, current section ${activeSectionLabel}`);
   }
 }
 
@@ -443,6 +521,7 @@ initAnimations({
   reduceMotion,
 });
 
-initProjectCarousel();
+initOperationsConsole();
+initProjectStage();
 updateActiveNav();
 updateScrollProgress();

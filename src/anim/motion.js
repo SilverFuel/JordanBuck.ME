@@ -81,7 +81,7 @@ function splitLabelText(node) {
 
 function showAllMotionTargets() {
   document
-    .querySelectorAll(`${sectionRevealSelector}, .hero__signal, .grid-field, .headshot-frame`)
+    .querySelectorAll(`${sectionRevealSelector}, .grid-field`)
     .forEach((target) => {
       Object.assign(target.style, visibleState);
     });
