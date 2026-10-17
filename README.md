@@ -54,3 +54,5 @@ Render automatically provisions and renews a free managed TLS certificate after 
 ## Content Updates
 
 Primary page content lives in `index.html`. Update the Open Graph source art in `public/og-card.svg`, then regenerate `public/og-card.png` at 1200x630 before publishing metadata changes.
+
+The MissionBoard case study links to the standalone, read-only sample-data demo at `https://missionboard-portfolio-demo.silverfuel.chatgpt.site/`. Its three actual demo screenshots are stored as `public/projects/missionboard-demo-*.png`; the image links open the full-resolution originals. This portfolio does not embed or connect to the MissionBoard production application. Validate changes with `npm run lint:html` and `npm run build`, then check the Projects section on desktop and mobile before publishing through the existing Render deployment.
