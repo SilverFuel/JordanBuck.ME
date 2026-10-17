@@ -8,11 +8,14 @@
     "prebuild": "node scripts/check-resume.js",
     "build": "vite build",
     "preview": "vite preview",
-    "lint:html": "node scripts/check-html.js"
+    "lint:html": "node scripts/check-html.js",
+    "test": "playwright test"
   },
   "dependencies": {
     "animejs": "^4.4.1",
     "vite": "^8.0.16"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@playwright/test": "^1.64.1"
+  }
 }
