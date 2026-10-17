@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="description" content="Explore Mission-Board with four fictional work items. A read-only portfolio demo of projects, owners, blockers, and next actions.">
+  <title>Mission-Board · Portfolio demo</title>
+  <link rel="icon" href="./brand-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./product.css">
+  <link rel="stylesheet" href="./demo.css">
+  <script type="module" src="./demo.js"></script>
+</head>
+<body class="portfolio-demo">
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="app">
+    <aside class="sidebar demo-sidebar" aria-label="Demo workspace">
+      <div class="sidebar-header">
+        <a class="demo-brand" href="#overview" aria-label="Mission-Board demo overview">
+          <img src="./brand-mark.svg" width="34" height="34" alt="">
+          <span class="logo"><span class="logo-text">Mission-Board</span><span class="logo-tagline">Know who owns what.</span></span>
+        </a>
+      </div>
+      <div class="workspace-label"><span class="workspace-monogram" aria-hidden="true">CW</span><span><strong>Cedarfield Workshop</strong><small>Fictional organization</small></span></div>
+      <nav class="sidebar-nav" aria-label="Demo views">
+        <span class="nav-section-title">Workspace</span>
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#overview" data-view="overview"><span class="nav-item-title">Overview</span><span class="nav-item-desc">See the sample workload</span></a></li>
+          <li class="nav-item"><a href="#attention" data-view="attention"><span class="nav-item-title">Needs Attention <span class="nav-count">3</span></span><span class="nav-item-desc">Find the next intervention</span></a></li>
+          <li class="nav-item"><a href="#projects" data-view="projects"><span class="nav-item-title">Projects <span class="nav-count">3</span></span><span class="nav-item-desc">Review status and next actions</span></a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-note"><span class="small-label">Portfolio walkthrough</span><p>Condensed views of Mission-Board’s existing features.</p><span class="read-only-label">Read-only · No account needed</span></div>
+    </aside>
+    <div class="main demo-main">
+      <header class="header demo-header"><span class="demo-label"><span aria-hidden="true" class="demo-dot"></span>Demo — sample data</span><span class="snapshot-label">Sample snapshot · Oct 14, 2026</span></header>
+      <main class="content demo-content" id="main" tabindex="-1">
+        <noscript><h1>Mission-Board demo</h1><p>This read-only walkthrough needs JavaScript to filter sample work and open details. Enable JavaScript and reload. All organizations, people, and activity are fictional.</p></noscript>
+        <div id="demo-view"></div>
+      </main>
+      <footer class="demo-footer"><span>All organizations, people, work, and activity are fictional.</span><details><summary>About this demo</summary><p>A condensed portfolio view of Mission-Board’s Overview, Needs Attention, project status, tasks, and update history. Escalation is recorded by people in notes and next actions. This is sample data, with no automated escalation or approval workflow. Filters and detail navigation work; editing is unavailable.</p></details></footer>
+    </div>
+  </div>
+</body>
+</html>

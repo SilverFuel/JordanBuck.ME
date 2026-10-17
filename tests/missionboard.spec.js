@@ -1,82 +1,13 @@
-import { test as base, expect } from '@playwright/test';
-
-const demoURL = 'https://missionboard-portfolio-demo.silverfuel.chatgpt.site/';
+import { test, expect, demoURL, openReference } from './portfolio-test.js';
 const scenes = [
   { id: 'overview', name: 'The working view', image: 'overview', reveal: 'A missing owner:' },
   { id: 'blocked', name: 'From blocker to next step', image: 'blocked', reveal: 'Theo Park' },
   { id: 'mobile', name: 'The same view on mobile', image: 'mobile', reveal: 'Choose the pilot handoff window' },
 ];
 
-// Local checks cannot contact the demo, production, analytics, or any other origin.
-// An explicit remote base URL allows only that portfolio origin, never its links.
-const test = base.extend({
-  isolatedPortfolio: [async ({ context, page, baseURL }, use) => {
-    const allowed = new URL(baseURL);
-    const unexpected = [];
-    const pageErrors = [];
-    page.on('pageerror', error => pageErrors.push(error.message));
-    await context.route('**/*', async route => {
-      const request = route.request();
-      const url = new URL(request.url());
-      const writes = !['GET', 'HEAD'].includes(request.method());
-      const api = ['fetch', 'xhr'].includes(request.resourceType()) || /\/api(?:\/|$)/i.test(url.pathname);
-      if (url.origin !== allowed.origin || writes || api) {
-        unexpected.push(`${request.method()} ${url.origin}${url.pathname} (${request.resourceType()})`);
-        await route.abort('blockedbyclient');
-        return;
-      }
-      await route.continue();
-    });
-    await context.routeWebSocket('**/*', socket => {
-      const url = new URL(socket.url());
-      if (url.host === allowed.host && ['localhost', '127.0.0.1', '[::1]'].includes(allowed.hostname)) {
-        socket.connectToServer();
-      } else {
-        unexpected.push(`WebSocket ${url.origin}${url.pathname}`);
-        socket.close();
-      }
-    });
-    await context.addInitScript(() => {
-      window.__portfolioStorageEffects = [];
-      for (const method of ['setItem', 'removeItem', 'clear']) {
-        const original = Storage.prototype[method];
-        Storage.prototype[method] = function (...args) {
-          window.__portfolioStorageEffects.push(`Storage.${method}`);
-          return original.apply(this, args);
-        };
-      }
-      for (const method of ['open', 'deleteDatabase']) {
-        const original = IDBFactory.prototype[method];
-        IDBFactory.prototype[method] = function (...args) {
-          window.__portfolioStorageEffects.push(`IndexedDB.${method}`);
-          return original.apply(this, args);
-        };
-      }
-      const cookie = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie');
-      if (cookie?.set) {
-        Object.defineProperty(Document.prototype, 'cookie', {
-          ...cookie,
-          set(value) {
-            window.__portfolioStorageEffects.push('document.cookie');
-            return cookie.set.call(this, value);
-          },
-        });
-      }
-    });
-    await use();
-    expect(unexpected, 'No external, API, or write requests').toEqual([]);
-    expect(pageErrors, 'No uncaught browser errors').toEqual([]);
-    if (!page.isClosed()) {
-      expect(await page.evaluate(() => window.__portfolioStorageEffects || []), 'No storage mutations').toEqual([]);
-      expect(await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length }))).toEqual({ local: 0, session: 0 });
-    }
-    const cookies = (await context.cookies()).map(({ name, domain }) => ({ name, domain }));
-    expect(cookies, 'No cookies created').toEqual([]);
-  }, { auto: true }],
-});
-
 async function openExplorer(page) {
   await page.goto('/#projects');
+  await openReference(page);
   await expect(page.locator('[data-mission-tabs]')).toBeVisible();
   await page.locator('[data-mission-explorer]').scrollIntoViewIfNeeded();
 }
@@ -130,6 +61,8 @@ test('a direct projects reload restores enhancement and clears transient viewer 
   await page.locator('[data-mission-zoom]').click();
   await page.reload();
   await expect(page).toHaveURL(/\/#projects$/);
+  await expect(page.locator('[data-mission-reference]')).not.toHaveAttribute('open');
+  await openReference(page);
   await expect(page.locator('[data-mission-tabs]')).toBeVisible();
   await expect(page.locator('[data-mission-controls]')).toBeVisible();
   await expectScene(page, 0);
@@ -344,6 +277,7 @@ test('demo links are limited to the intended public sample routes', async ({ pag
   const links = page.locator('[data-mission-explorer] a[href^="https:"]');
   expect(await links.evaluateAll(elements => elements.map(link => link.href))).toEqual([
     demoURL,
+    demoURL,
     `${demoURL}#attention`,
     `${demoURL}#work/service-desk-move`,
     `${demoURL}#work/pilot-window`,
@@ -353,6 +287,7 @@ test('demo links are limited to the intended public sample routes', async ({ pag
     await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
     await expect(link).toContainText('(opens in a new tab)');
   }
+  await expect(page.locator('.mission-demo-actions .button')).toHaveAttribute('href', '#missionboard-live');
   await expect(page.locator('[data-mission-explorer] form, [data-mission-explorer] input')).toHaveCount(0);
 });
 
@@ -393,6 +328,8 @@ test.describe('without JavaScript', () => {
   test.use({ javaScriptEnabled: false });
   test('all scenes, native reveals, screenshot originals, and demo links remain available', async ({ page }) => {
     await page.goto('/#projects');
+    await expect(page.locator('[data-mission-reference]')).not.toHaveAttribute('open');
+    await openReference(page);
     await expect(page.locator('[data-mission-tabs]')).toBeHidden();
     await expect(page.locator('[data-mission-controls]')).toBeHidden();
     await expect(page.locator('[data-mission-dialog]')).toBeHidden();
