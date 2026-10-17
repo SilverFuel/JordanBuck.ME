@@ -160,3 +160,34 @@ body.mission-viewer-open { overflow: hidden; }
   .mission-scene[role="tabpanel"]:not([hidden]) { animation: none; }
   .mission-screen img, .mission-discovery summary span { transition: none; }
 }
+
+/* The interactive workspace is a separate-origin, read-only document. */
+.mission-live { border-top: 1px solid var(--line); scroll-margin-top: 90px; }
+.mission-live:focus { outline: none; }
+.mission-live__heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25rem 1.5rem; }
+.mission-live__heading h4 { margin: 0; font-size: 1.2rem; }
+.mission-live__heading p { margin: 0.4rem 0 0; color: var(--muted); font-size: 0.85rem; line-height: 1.5; }
+.mission-live__heading > a { flex-shrink: 0; }
+.mission-live__note { display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem 0.7rem; padding: 0.8rem 1.5rem; border-block: 1px solid var(--line); color: var(--accent); background: rgba(0,0,0,0.16); font-size: 0.75rem; line-height: 1.6; }
+.mission-live__note > span:last-child { color: var(--muted); }
+.mission-live__skip { display: block; width: max-content; max-width: 100%; margin: 0.65rem 1.5rem; color: var(--accent); font-size: 0.75rem; text-decoration: underline; text-underline-offset: 3px; }
+.mission-live__frame { display: block; width: 100%; height: 820px; border: 0; background: #f8fafc; color-scheme: light; }
+.mission-live__help { margin: 0; padding: 0.9rem 1.5rem; color: var(--muted); font-size: 0.75rem; line-height: 1.6; }
+.mission-live__help a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.mission-reference { border-top: 1px solid var(--line); scroll-margin-top: 90px; }
+.mission-reference > summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 60px; padding: 1rem 1.5rem; color: var(--text); font-size: 0.85rem; font-weight: 650; list-style: none; cursor: pointer; }
+.mission-reference > summary::-webkit-details-marker { display: none; }
+.mission-reference > summary span { color: var(--accent); font-size: 1.3rem; }
+.mission-reference[open] > summary span { transform: rotate(45deg); }
+.mission-reference > summary:hover { color: var(--accent); }
+.mission-reference > summary:focus-visible { outline-offset: -5px; }
+@media (max-width: 600px) {
+  .mission-live__heading { align-items: flex-start; flex-direction: column; padding: 1.1rem; }
+  .mission-live__note, .mission-live__help, .mission-reference > summary { padding-inline: 1.1rem; }
+  .mission-live__skip { margin-inline: 1.1rem; }
+  .mission-live__frame { height: 740px; }
+}
+@media (max-width: 360px) {
+  /* Preserve the demo's 320px navigation width inside the 24px mobile gutter. */
+  .mission-case-study.mission-interactive { width: calc(100% + 24px); margin-inline: -12px; border-inline: 0; border-radius: 0; }
+}

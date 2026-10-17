@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Mission-Board brand mark</title>
+  <desc id="desc">A four-tile work board with an open item and teal attention signal.</desc>
+
+  <path
+    fill="#101827"
+    d="M32 18h28c7.73 0 14 6.27 14 14v37.31c0 3.08-3.36 5-6.02 3.46L58 67v7H32c-7.73 0-14-6.27-14-14V32c0-7.73 6.27-14 14-14Z"
+  />
+  <rect x="86" y="18" width="56" height="56" rx="14" fill="#101827" />
+  <rect x="18" y="86" width="56" height="56" rx="14" fill="#101827" />
+  <path
+    d="M126 90h-24c-6.63 0-12 5.37-12 12v26c0 6.63 5.37 12 12 12h26c6.63 0 12-5.37 12-12v-16"
+    fill="none"
+    stroke="#2F5F8F"
+    stroke-width="8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <circle cx="140" cy="94" r="9" fill="#2B9AA0" />
+</svg>

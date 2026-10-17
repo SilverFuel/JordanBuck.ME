@@ -1,0 +1,34 @@
+{
+  "description": "Immutable sample-data demo snapshot for isolated cross-origin iframe tests; never served by the portfolio build.",
+  "publicOrigin": "https://missionboard-portfolio-demo.silverfuel.chatgpt.site",
+  "publishedSourceCommit": "1a92a6e6ed87cdb0b2e139f2be3e59b09420e919",
+  "sourceExport": "Mission-Board/docs/portfolio-demo/dist",
+  "publishedSourceDirectory": "dist",
+  "verification": "Every file was byte-compared with the published site source commit before copying. CSP is unchanged.",
+  "files": {
+    "index.html": {
+      "sha256": "b6bc4abcdc9a589f09471aeca6e321798f3d8ea22e7d636c1e557aa7399647f2",
+      "bytes": 3771
+    },
+    "demo.css": {
+      "sha256": "8e823f4b643200d5a8dce18e5b53af0206d8fa9954049c53d6fb360a7f0ec3cb",
+      "bytes": 19482
+    },
+    "demo.js": {
+      "sha256": "80ab013725cc62d10d1f42efea49a1d2bf310e8fde61949452954adb8b3fcee0",
+      "bytes": 14067
+    },
+    "sample-data.js": {
+      "sha256": "a2096361e321a585842f99a4213e9811da3d5d094d4959b25b87c4e924f18c87",
+      "bytes": 5454
+    },
+    "product.css": {
+      "sha256": "9f3b8c636f0933c5fb593f8c34a6cf8a5c12e7ab201f7c719c9586fb09092362",
+      "bytes": 137942
+    },
+    "brand-mark.svg": {
+      "sha256": "89e84c035b88c333b482cf20ce31718d4f66e6305bc754ddb2cdc4f1cffc4fc8",
+      "bytes": 829
+    }
+  }
+}
