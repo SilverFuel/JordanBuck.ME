@@ -10,6 +10,7 @@ import {
 } from 'animejs';
 import './styles/main.css';
 import { initAnimations } from './anim/motion.js';
+import { initMissionBoardExplorer } from './missionboard-explorer.js';
 
 const RECOMMENDATIONS_LIVE = false;
 const recommendations = [
@@ -639,5 +640,6 @@ initAnimations({
 initOperationsConsole();
 initOwnershipPath();
 initProjectStage();
+initMissionBoardExplorer();
 updateActiveNav();
 updateScrollProgress();

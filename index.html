@@ -269,42 +269,106 @@
             <h2 class="section-title glyph-title" id="projects-title" data-split-text>Built for real work</h2>
             <p class="lead reveal-line">MissionBoard started with an operating problem I had: too much important work spread across too many views.</p>
           </div>
-          <article class="mission-case-study reveal-card" aria-labelledby="missionboard-title">
-            <figure class="mission-case-study__media mission-demo-preview">
-              <a href="/projects/missionboard-demo-overview.png" target="_blank" rel="noopener noreferrer" aria-label="Open full MissionBoard overview screenshot in a new tab">
-                <img src="/projects/missionboard-demo-overview.png" alt="MissionBoard sample workspace showing four featured records, including a blocked project, an escalation, and an unassigned decision" width="1440" height="1108" loading="lazy" decoding="async">
-              </a>
-              <figcaption>Demo — sample data <span>Overview · open full screenshot ↗</span></figcaption>
-            </figure>
-            <div class="mission-case-study__body">
-              <p class="project-card__eyebrow">Leadership system</p>
-              <h3 id="missionboard-title">MissionBoard</h3>
-              <p class="mission-case-study__summary">One working view for projects, escalations, owners, blockers, and the next decision.</p>
+          <article class="mission-case-study mission-interactive reveal-card" aria-labelledby="missionboard-title" data-mission-explorer>
+            <div class="mission-intro">
+              <div>
+                <p class="project-card__eyebrow">Leadership system · hands-on walkthrough</p>
+                <h3 id="missionboard-title">MissionBoard</h3>
+                <p class="mission-case-study__summary">One working view for projects, escalations, owners, blockers, and the next decision.</p>
+              </div>
               <div class="mission-demo-actions">
                 <a class="button button--primary" href="https://missionboard-portfolio-demo.silverfuel.chatgpt.site/" target="_blank" rel="noopener noreferrer">View live demo <span aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>
-                <p>Read-only sample data. No account required. Filter the workload and open project details.</p>
+                <p>Read-only sample data. No account required.</p>
               </div>
-              <dl class="mission-case-study__proof">
-                <div><dt>Problem</dt><dd>Active work and ownership were spread across too many places.</dd></div>
-                <div><dt>Built</dt><dd>A single operating view that makes status, owners, and blockers visible.</dd></div>
-                <div><dt>Changed</dt><dd>I can see what is stuck and who can move it without rebuilding the picture by hand.</dd></div>
-              </dl>
             </div>
-            <div class="mission-demo-gallery" aria-label="More MissionBoard demo screenshots">
-              <figure>
-                <a href="/projects/missionboard-demo-blocked.png" target="_blank" rel="noopener noreferrer" aria-label="Open full blocked-project screenshot in a new tab">
-                  <img src="/projects/missionboard-demo-blocked.png" alt="A fictional blocked project with its owner, access blocker, next step, action items, and recent updates" width="1440" height="1042" loading="lazy" decoding="async">
-                </a>
-                <figcaption><strong>From blocker to next step</strong><span>Project detail · open full screenshot ↗</span></figcaption>
-              </figure>
-              <figure>
-                <a href="/projects/missionboard-demo-mobile.png" target="_blank" rel="noopener noreferrer" aria-label="Open full mobile overview screenshot in a new tab">
-                  <img src="/projects/missionboard-demo-mobile.png" alt="The same MissionBoard sample workspace arranged for a mobile screen" width="390" height="1923" loading="lazy" decoding="async">
-                </a>
-                <figcaption><strong>The same view on mobile</strong><span>Mobile overview · open full screenshot ↗</span></figcaption>
-              </figure>
+            <div class="mission-tour-heading">
+              <p><span class="mission-sample-dot" aria-hidden="true"></span> Demo — sample data</p>
+              <span>Three views. Follow the work.</span>
+            </div>
+            <div class="mission-tabs" role="tablist" aria-label="MissionBoard walkthrough" data-mission-tabs hidden>
+              <button type="button" id="mission-tab-overview" role="tab" aria-controls="mission-scene-overview" aria-selected="true" data-mission-tab><span>01</span> Scan the workload</button>
+              <button type="button" id="mission-tab-blocked" role="tab" aria-controls="mission-scene-blocked" aria-selected="false" tabindex="-1" data-mission-tab><span>02</span> Follow a blocker</button>
+              <button type="button" id="mission-tab-mobile" role="tab" aria-controls="mission-scene-mobile" aria-selected="false" tabindex="-1" data-mission-tab><span>03</span> Take it with you</button>
+            </div>
+            <div class="mission-scenes">
+              <div class="mission-scene" id="mission-scene-overview" data-mission-scene data-mission-name="The working view">
+                <figure class="mission-screen">
+                  <a href="/projects/missionboard-demo-overview.png" target="_blank" rel="noopener noreferrer" data-mission-image aria-label="Expand the MissionBoard overview screenshot">
+                    <img src="/projects/missionboard-demo-overview.png" alt="MissionBoard sample workspace showing four featured records, including a blocked project, an escalation, and an unassigned decision" width="1440" height="1108" loading="lazy" decoding="async">
+                    <span class="mission-expand" aria-hidden="true">⤢ Expand screenshot</span>
+                  </a>
+                  <figcaption>Actual demo screenshot · desktop overview</figcaption>
+                </figure>
+                <div class="mission-story">
+                  <p class="mission-kicker">Your first look</p>
+                  <h4>What needs your attention?</h4>
+                  <p>Four pieces of work. One is moving normally. The others need access, a recovery review, or someone to own a decision.</p>
+                  <details class="mission-discovery">
+                    <summary>Reveal the signals <span aria-hidden="true">+</span></summary>
+                    <div><p><strong>A blocker:</strong> the service desk move is waiting on room access.</p><p><strong>An escalation:</strong> Nia Quinn has raised the tablet recovery plan with the operations lead.</p><p><strong>A missing owner:</strong> no one owns the pilot handoff decision yet.</p></div>
+                  </details>
+                  <a class="mission-try" href="https://missionboard-portfolio-demo.silverfuel.chatgpt.site/#attention" target="_blank" rel="noopener noreferrer">Explore what needs attention ↗<span class="visually-hidden"> (opens in a new tab)</span></a>
+                </div>
+              </div>
+              <div class="mission-scene" id="mission-scene-blocked" data-mission-scene data-mission-name="From blocker to next step">
+                <figure class="mission-screen">
+                  <a href="/projects/missionboard-demo-blocked.png" target="_blank" rel="noopener noreferrer" data-mission-image aria-label="Expand the blocked-project screenshot">
+                    <img src="/projects/missionboard-demo-blocked.png" alt="A fictional blocked project with its owner, access blocker, next step, action items, and recent updates" width="1440" height="1042" loading="lazy" decoding="async">
+                    <span class="mission-expand" aria-hidden="true">⤢ Expand screenshot</span>
+                  </a>
+                  <figcaption>Actual demo screenshot · project detail</figcaption>
+                </figure>
+                <div class="mission-story">
+                  <p class="mission-kicker">Follow the thread</p>
+                  <h4>Blocked. But what happens next?</h4>
+                  <p>The equipment is ready. The room is not. Open the project and the owner, blocker, next step, and recent updates stay together.</p>
+                  <details class="mission-discovery">
+                    <summary>Reveal the next move <span aria-hidden="true">+</span></summary>
+                    <div><p><strong>Theo Park</strong> owns the follow-up: confirm room access with the facilities lead by <strong>Oct 15</strong> in this sample snapshot.</p><p>Installation can begin once access is confirmed. The next action is visible alongside the reason work stopped.</p></div>
+                  </details>
+                  <a class="mission-try" href="https://missionboard-portfolio-demo.silverfuel.chatgpt.site/#work/service-desk-move" target="_blank" rel="noopener noreferrer">Open this project in the demo ↗<span class="visually-hidden"> (opens in a new tab)</span></a>
+                </div>
+              </div>
+              <div class="mission-scene" id="mission-scene-mobile" data-mission-scene data-mission-name="The same view on mobile">
+                <figure class="mission-screen mission-screen--mobile">
+                  <a href="/projects/missionboard-demo-mobile.png" target="_blank" rel="noopener noreferrer" data-mission-image aria-label="Expand the mobile overview screenshot">
+                    <img src="/projects/missionboard-demo-mobile.png" alt="The same MissionBoard sample workspace arranged for a mobile screen" width="390" height="1923" loading="lazy" decoding="async">
+                    <span class="mission-expand" aria-hidden="true">⤢ Explore the full mobile view</span>
+                  </a>
+                  <figcaption>Actual demo screenshot · tap to explore the full mobile view</figcaption>
+                </figure>
+                <div class="mission-story">
+                  <p class="mission-kicker">A smaller screen. The same work.</p>
+                  <h4>Find the decision with no owner.</h4>
+                  <p>The overview adapts to a phone. In the live demo, open the filters and choose “Unassigned” to find the handoff decision.</p>
+                  <details class="mission-discovery">
+                    <summary>Reveal the handoff <span aria-hidden="true">+</span></summary>
+                    <div><p><strong>Choose the pilot handoff window</strong> is waiting on a decision owner.</p><p>Name an owner, then confirm a morning or afternoon window. The field kits can keep moving while that decision is made.</p></div>
+                  </details>
+                  <a class="mission-try" href="https://missionboard-portfolio-demo.silverfuel.chatgpt.site/#work/pilot-window" target="_blank" rel="noopener noreferrer">Open the unowned decision ↗<span class="visually-hidden"> (opens in a new tab)</span></a>
+                </div>
+              </div>
+            </div>
+            <div class="mission-tour-controls" data-mission-controls hidden>
+              <p role="status" aria-live="polite" aria-atomic="true" data-mission-status>01 / 03 · The working view</p>
+              <div><button type="button" class="mission-control" data-mission-prev aria-label="Previous walkthrough view">← Back</button><button type="button" class="mission-control mission-control--next" data-mission-next>Next view →</button></div>
             </div>
           </article>
+          <dialog class="mission-lightbox" aria-labelledby="mission-lightbox-title" data-mission-dialog>
+            <div class="mission-lightbox__content">
+              <div class="mission-lightbox__toolbar">
+                <div><p>Demo — sample data</p><h3 id="mission-lightbox-title" data-mission-dialog-title>MissionBoard screenshot</h3></div>
+                <button type="button" class="mission-control" data-mission-close autofocus aria-label="Close screenshot viewer">Close <span aria-hidden="true">×</span></button>
+              </div>
+              <div class="mission-lightbox__viewport" tabindex="0" role="region" aria-label="Screenshot; scroll to explore when zoomed" data-mission-dialog-viewport><img data-mission-dialog-image alt=""></div>
+              <div class="mission-lightbox__footer">
+                <button type="button" class="mission-control" data-mission-dialog-prev aria-label="Previous screenshot">← <span>Previous</span></button>
+                <button type="button" class="mission-control" data-mission-zoom aria-pressed="false">Zoom in</button>
+                <p role="status" aria-live="polite" aria-atomic="true" data-mission-dialog-status></p>
+                <button type="button" class="mission-control" data-mission-dialog-next aria-label="Next screenshot"><span>Next</span> →</button>
+              </div>
+            </div>
+          </dialog>
           <div class="after-hours">
             <div class="after-hours__heading reveal-line">
               <p class="eyebrow">AFTER HOURS</p>
