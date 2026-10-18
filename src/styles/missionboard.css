@@ -191,3 +191,26 @@ body.mission-viewer-open { overflow: hidden; }
   /* Preserve the demo's 320px navigation width inside the 24px mobile gutter. */
   .mission-case-study.mission-interactive { width: calc(100% + 24px); margin-inline: -12px; border-inline: 0; border-radius: 0; }
 }
+
+.mission-case-study__overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2rem);
+  align-items: center;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.mission-case-study__overview .mission-demo-actions {
+  max-width: none;
+  margin-top: 1.25rem;
+}
+
+@media (max-width: 1020px) {
+  .mission-case-study__overview {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mission-case-study__overview .mission-case-study__body {
+    grid-row: 1;
+  }
+}
