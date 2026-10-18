@@ -6,6 +6,7 @@ const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
 
 export default defineConfig({
   testDir: './tests',
+  testMatch: '**/*.spec.js',
   fullyParallel: true,
   workers: 2,
   forbidOnly: Boolean(process.env.CI),
