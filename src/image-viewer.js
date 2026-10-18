@@ -30,8 +30,8 @@ export function initImageViewer(root = document) {
       image.alt = link.querySelector('img')?.alt || 'MissionBoard';
       original.href = link.href;
       opener = link;
-      setZoom(false);
       dialog.showModal();
+      setZoom(false);
       root.body.classList.add('image-viewer-open');
       event.preventDefault();
     });
