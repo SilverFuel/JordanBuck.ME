@@ -30,6 +30,11 @@ const requiredHooks = [
   'data-ownership-tabs',
   'data-project-stage',
   'data-project-tabs',
+  'data-image-preview',
+  'data-image-viewer',
+  'data-image-zoom',
+  'id="missionboard-live"',
+  'title="MissionBoard live demo — fictional read-only workspace"',
 ];
 
 if (missing.length > 0) {
@@ -57,8 +62,8 @@ if (ownershipPanels !== 4) {
   process.exit(1);
 }
 
-if (aboutBeats !== 3 || !html.includes('class="incident-callout')) {
-  console.error(`Expected 3 About beats and a Delivery Optimization incident callout, found ${aboutBeats} beats.`);
+if (aboutBeats !== 4 || !html.includes('class="incident-callout')) {
+  console.error(`Expected 4 About beats and a Delivery Optimization incident callout, found ${aboutBeats} beats.`);
   process.exit(1);
 }
 
@@ -66,7 +71,7 @@ if (
   operationModes !== 3
   || html.includes('2,700+')
   || scaleMetricCounts.software !== 1
-  || scaleMetricCounts.endpoints !== 1
+  || scaleMetricCounts.endpoints !== 2
   || requiredMetricPatterns.some((pattern) => !pattern.test(html))
 ) {
   console.error(`Expected consolidated operational scope metrics, found ${operationModes} modes, ${scaleMetricCounts.software} software values, and ${scaleMetricCounts.endpoints} endpoint values.`);
@@ -83,10 +88,15 @@ const positioningSignals = [
   '5+ stores',
   '300+ reviews',
   'more than $3.5M in revenue',
-  '82.32% to 99.19%',
   'jordan@jordanbuck.me',
   'href="/jordan-buck-resume.pdf"',
 ];
+
+const complianceComparison = /class="ownership-result__comparison"><span>82\.32%<\/span>\s*<span[^>]*>to<\/span>\s*<strong>99\.19%<\/strong>/;
+if (!complianceComparison.test(html) || !html.includes('Built a statewide update-compliance program')) {
+  console.error('The measured compliance comparison or update-program context is missing.');
+  process.exit(1);
+}
 
 if (
   positioningSignals.some((signal) => !html.includes(signal))

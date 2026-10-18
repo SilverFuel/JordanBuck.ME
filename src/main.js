@@ -11,6 +11,7 @@ import {
 import './styles/main.css';
 import { initAnimations } from './anim/motion.js';
 import { initMissionBoardExplorer } from './missionboard-explorer.js';
+import { initImageViewer } from './image-viewer.js';
 
 const RECOMMENDATIONS_LIVE = false;
 const recommendations = [
@@ -389,6 +390,7 @@ function initProjectStage() {
   const currentLabel = stage.querySelector('[data-project-current]');
   const totalLabel = stage.querySelector('[data-project-total]');
   const nameStatus = stage.querySelector('[data-project-name-status]');
+  const compactLayout = window.matchMedia('(max-width: 719px)');
 
   if (!viewport || !tabsContainer || !panels.length) {
     return;
@@ -479,6 +481,10 @@ function initProjectStage() {
       nextIndex = (activeIndex - 1 + panels.length) % panels.length;
     } else if (event.key === 'ArrowRight') {
       nextIndex = (activeIndex + 1) % panels.length;
+    } else if (compactLayout.matches && event.key === 'ArrowUp') {
+      nextIndex = (activeIndex - 2 + panels.length) % panels.length;
+    } else if (compactLayout.matches && event.key === 'ArrowDown') {
+      nextIndex = (activeIndex + 2) % panels.length;
     } else if (event.key === 'Home') {
       nextIndex = 0;
     } else if (event.key === 'End') {
@@ -640,6 +646,7 @@ initAnimations({
 initOperationsConsole();
 initOwnershipPath();
 initProjectStage();
+initImageViewer();
 initMissionBoardExplorer();
 updateActiveNav();
 updateScrollProgress();
