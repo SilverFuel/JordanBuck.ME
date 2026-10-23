@@ -12,6 +12,7 @@ import './styles/main.css';
 import { initAnimations } from './anim/motion.js';
 import { initMissionBoardExplorer } from './missionboard-explorer.js';
 import { initImageViewer } from './image-viewer.js';
+import './styles/paper.css';
 
 const RECOMMENDATIONS_LIVE = false;
 const recommendations = [
